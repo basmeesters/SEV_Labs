@@ -41,10 +41,3 @@ public void Extract(loc project, str ext)
 }
 
 public set[Declaration] Decl(loc project) {return createAstsFromEclipseProject(project,true); }
-
-// Calculate the the sum of values in a map
-public int sumMap(map[&T, int] m)
-{
-	int total = (0 | it + m[location] | location <- m);
-	return total;
-}

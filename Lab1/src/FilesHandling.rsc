@@ -20,9 +20,6 @@ public list[loc] getFiles (loc path, str ext) {
 	return filteredFilesList;
 }
 
-// if (/[.]<guy:[A-Za-z0-9]+>$/ := "line.java") println(guy);
-// toLocation
-
 public str getExt(loc path) {
 	str pathString = locToStr(path);
 	if (/[.]<fileExt:[A-Za-z0-9]+>[|]$/ := pathString) {

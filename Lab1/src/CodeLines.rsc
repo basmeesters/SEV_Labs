@@ -8,25 +8,14 @@ import IO;
 import ParseTree;
 import String;
 
-// Project location and string created 
-public loc project = |project://Hello|;
-public str program2 = readFile(|project://Hello/src/testPack/Main.java|);
-public loc program = |project://Hello/src/testPack/Main.java|;
-
-
 // Calculate the lines of code given a string
-public int linesOfCode(loc path) 
+public list[str] LinesOfCode(loc path) 
 {
 	list[str] lines = readFileLines(path);
-	// Current count
-	int count = 0;
-	
-	// Check if we are in /* */ comment lines
+	// Bool used for multi-line comments
   	bool comment = true;
   	
-  	// Split lines and go through each line
-	//str string = cleanString(program);
-  	//list[str] lines = split("\n", program);
+  	list[str] code = [];
   	for (l <- lines) {
   		line = trim(l);
   		
@@ -42,35 +31,28 @@ public int linesOfCode(loc path)
 				comment = true;
 			}
 			else if (comment := true){
-				count += 1;
-				//print(<count>);
-				//println(line);
+				code += line;
 			}
 		}
 		else if (comment := true && size(line) >0) {
-			count += 1;
-			//print(<count>);
-			//println(line);
+			code += line;
 		}
   	}
-  return count;
+  return code;
 }
 
-public str cleanString(str s)
-{
-	str replaceR = replaceAll(s, "\r\n", "\n");
-  	str replaceR2 = replaceAll(replaceR, "\n\r", "\n");
-  	str removeR = replaceAll(replaceR2, "\r", "\n");
-  	str removeTab = replaceAll(removeR, "\t", "");
-  	str removeSpace = replaceAll(removeTab, " ", "");
-  	return removeSpace;
-}
-
+// Not being used at all now
 public str check(str string) 
 { 
 	int count = 0;
 	str newString = "";
-	//visit(string)
+	result = "";
+	while (/^<before:[^\r\n]><after:.*$>/ := string) { 
+    	result = result +  + "\n";
+    	string = after;
+    }
+	return result;
+		//visit(string)
 	//{
 	//	//case /^\r\n/ : count +1;
 	//	//case /^\n\r/ : count +1;
@@ -82,10 +64,4 @@ public str check(str string)
 	//	//case /^\s/ : count +=1;
 	//	//case /^\t/ : count +=1;
 	//}
-	result = "";
-	while (/^<before:[^\r\n]><after:.*$>/ := string) { 
-    	result = result +  + "\n";
-    string = after;
-  }
-	return result;
 }

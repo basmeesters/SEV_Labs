@@ -5,11 +5,20 @@ import lang::java::m3::Core;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import IO;
-import CodeLines;
+import Volume;
 import util::Math;
+import CodeLines;
+import List;
+
+public map[loc, int] Complexity(loc project)
+{
+	set[Declaration] dcs = createAstsFromEclipseProject(project,true);
+	return Complexity(dcs);
+}
 
 public map[loc, int] Complexity(set[Declaration] dcs)
 {
+	
 	map[loc, int] dict = ();
 	for (d <- dcs)
 	{
@@ -19,7 +28,7 @@ public map[loc, int] Complexity(set[Declaration] dcs)
 			case \method(_,_,_,_,Statement s) : count += complexityStatement(s); 
 			case \method(_,_,_,_): count += 1;
 		}
-		dict += (d@decl : count);
+		dict += (d@src : count);
 	}
 	return dict;
 }
@@ -58,6 +67,48 @@ public int complexityStatement(Statement s)
 	return count;
 }
 
+public map[str, real] RiskPercentage(loc project, str ext)
+{
+	set[Declaration] dcs = createAstsFromEclipseProject(project,true);
+	map[loc, int] codeCount = CountUnits(project, ext);
+	return RiskPercentage(dcs, codeCount, CountCode(codeCount));
+}
+
+// Example: |project//smalsql0.21_src
+// map[str, real]: ("Very high risk":58.1930995568600,"Moderate risk":11.093353389300,"High risk":20.550907211700,"No risk":10.1626398418700)
+
+public map[str, real] RiskPercentage(set[Declaration] dcs, map[loc, int] codeCount, int total)
+{
+	map[loc, int] riskTable = Risk(dcs);
+
+	real veryHighRisk = 0.0;
+	real highRisk = 0.0;
+	real risk = 0.0;
+	real noRisk = 0.0;
+	
+	for (i <- riskTable)
+	{
+		real lineAmount = toReal(size(LinesOfCode(i))); // This needs some change..
+		if (riskTable[i] == 3)
+			veryHighRisk += (lineAmount / total) * 100;
+		else if (riskTable[i] == 2)
+			highRisk += (lineAmount / total) * 100;
+		else if (riskTable[i] == 1)
+			risk += (lineAmount / total) * 100;
+		else {
+			noRisk += (lineAmount / total)* 100; 
+		}
+	}
+	
+	return ("No risk":noRisk, "Moderate risk":risk, "High risk":highRisk, "Very high risk":veryHighRisk);
+}
+
+public map[loc, int] Risk(loc project)
+{
+	set[Declaration] dcs = createAstsFromEclipseProject(simple,true);
+	return Risk(dcs);
+}
+
 public map[loc, int] Risk(set[Declaration] dcs)
 {
 	map[loc, int] dict = Complexity(dcs);
@@ -76,31 +127,4 @@ public map[loc, int] Risk(set[Declaration] dcs)
 		risk += (m: r);
 	}
 	return risk;
-}
-
-public map[str, real] RiskPercentage(set[Declaration] dcs, int total)
-{
-	map[loc, int] riskTable = Risk(dcs);
-	println(riskTable);
-
-	real veryHighRisk = 0.0;
-	real highRisk = 0.0;
-	real risk = 0.0;
-	real noRisk = 0.0;
-	
-	for (i <- riskTable)
-	{
-		real lineAmount = toReal(linesOfCode(i)); // Not very efficient to do this multiple times
-		println("line amount:<lineAmount>");
-		if (riskTable[i] == 3)
-			veryHighRisk += (lineAmount / total) * 100;
-		else if (riskTable[i] == 2)
-			highRisk += (lineAmount / total) * 100;
-		else if (riskTable[i] == 1)
-			risk += (lineAmount / total) * 100;
-		else {
-			noRisk += (lineAmount / total)* 100; println(<noRisk>);}
-	}
-	
-	return ("No risk":noRisk, "Moderate risk":risk, "High risk":highRisk, "Very high risk":veryHighRisk);
 }
