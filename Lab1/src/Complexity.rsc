@@ -5,32 +5,23 @@ import lang::java::m3::Core;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import IO;
+import CodeLines;
+import util::Math;
 
-public loc project = |project://Hello|;
-public M3 model = createM3FromEclipseProject(project);
-
-public int cyclomaticComplexity(Graph[&T] PRED){
- return size(PRED) - size(carrier(PRED)) + 2;
-}
-
-public set[loc] containMain() {return model@containment[|java+class:///testPack/Main|]; }
-public rel[loc from, loc to] contain = model@containment;
-
-
-public set[Declaration] decls = createAstsFromEclipseProject(project,true);
-
-public int complexity(set[Declaration] dcs)
+public map[loc, int] Complexity(set[Declaration] dcs)
 {
-	int count = 1;
+	map[loc, int] dict = ();
 	for (d <- dcs)
 	{
+		int count = 0;
 		visit (d) {
 			case \constructor(_, _,_, Statement s): count += complexityStatement(s); 
 			case \method(_,_,_,_,Statement s) : count += complexityStatement(s); 
 			case \method(_,_,_,_): count += 1;
 		}
+		dict += (d@decl : count);
 	}
-	return count;
+	return dict;
 }
 
 public int complexityStatement(Statement s)
@@ -67,19 +58,49 @@ public int complexityStatement(Statement s)
 	return count;
 }
 
-public Declaration methodAST = getMethodASTEclipse(|java+method:///testPack/Main/main(java.lang.String%5B%5D)|, model=model);
-//public int exprCount(Declaration d) {return (0 | it + 1 | /Expression _ := d); }
+public map[loc, int] Risk(set[Declaration] dcs)
+{
+	map[loc, int] dict = Complexity(dcs);
+	map[loc, int] risk = ();
+	for (m <- dict)
+	{
+		int r;
+		if (dict[m] < 10)
+			r = 0;
+		else if (dict[m] < 20)
+			r = 1;
+		else if (dict[m] < 50)
+			r = 2;
+		else
+			r = 3;
+		risk += (m: r);
+	}
+	return risk;
+}
 
-// set[loc] contain() {return myModel@containment[|java+class:///Main|]; }
-// list[loc] methods() {return [ e | e <- myModel@containment[|java+class:///Main|], e.scheme == "java+method"];; }
+public map[str, real] RiskPercentage(set[Declaration] dcs, int total)
+{
+	map[loc, int] riskTable = Risk(dcs);
+	println(riskTable);
 
-public list[loc] locations = [m@src | /Expression m := methodAST];
-
-// Extract information
-public list[loc] classes = [ e | e <- model@containment[|java+package:///testPack|]];
-public list[loc] methods = [ e | e <- model@containment[|java+class:///testPack/Main|], e.scheme == "java+method"];
-public list[loc] fields = [ e | e <- model@containment[|java+class:///testPack/Main|], e.scheme == "java+field"];
-
-// methods of the whole package
-//public list[loc] methods2 = methods(model);
-// BTW, The "uses" and "declarations" relations together can be combined to get a graph that links uses to definition sites, i.e. `m@uses o m@declarations`.
+	real veryHighRisk = 0.0;
+	real highRisk = 0.0;
+	real risk = 0.0;
+	real noRisk = 0.0;
+	
+	for (i <- riskTable)
+	{
+		real lineAmount = toReal(linesOfCode(i)); // Not very efficient to do this multiple times
+		println("line amount:<lineAmount>");
+		if (riskTable[i] == 3)
+			veryHighRisk += (lineAmount / total) * 100;
+		else if (riskTable[i] == 2)
+			highRisk += (lineAmount / total) * 100;
+		else if (riskTable[i] == 1)
+			risk += (lineAmount / total) * 100;
+		else {
+			noRisk += (lineAmount / total)* 100; println(<noRisk>);}
+	}
+	
+	return ("No risk":noRisk, "Moderate risk":risk, "High risk":highRisk, "Very high risk":veryHighRisk);
+}
