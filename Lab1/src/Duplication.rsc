@@ -6,6 +6,9 @@ import String;
 import List;
 
 // Calculate the total amount of lines of code
-public int CheckDuplicates(loc project, str ext, int size) {
-	
+public map[str, tuple[int, int]] FindDuplicates(loc path, int size) {
+	list[str] lines = readFileLines(path);
+	for(line <- lines) {
+	;
+	}
 }
