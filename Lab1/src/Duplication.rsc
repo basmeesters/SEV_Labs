@@ -4,6 +4,7 @@ import CodeLines;
 import FilesHandling;
 import String;
 import List;
+import IO;
 
 public map[str, tuple[int, int]] FindDuplicates(loc path, int size) {
 	list[str] blocks = GroupBlocks(path, size);
@@ -11,7 +12,7 @@ public map[str, tuple[int, int]] FindDuplicates(loc path, int size) {
 		return false;
 	
 }
-
+// |project://Hello/src/testPack/Main.java|
 public list[str] GroupBlocks(loc path, int size) {
 	list[str] lines = readFileLines(path);
 	list[str] blocks = [];
@@ -23,12 +24,12 @@ public list[str] GroupBlocks(loc path, int size) {
 		// Group lines to defined block size
 		if(counter >= size) {
 			// add the block, reset temp vars
-			blocks += line;
+			blocks += tempBlock;
 			counter = 0;
 			tempBlock = "";
 		}
 	}
-	if(counter > 0)
-		blocks += line; // add the rest of the code to a new block
+	if(counter > 0 && size(tempBlock) > 0)
+		blocks += tempBlock; // add the rest of the code to a new block
 	return blocks;
 }
