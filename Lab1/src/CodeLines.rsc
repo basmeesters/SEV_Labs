@@ -9,7 +9,7 @@ import ParseTree;
 import String;
 
 // Calculate the lines of code given a string
-public list[str] LinesOfCode(loc path) 
+public list[str] CleanCode(loc path) 
 {
 	list[str] lines = readFileLines(path);
 	// Bool used for multi-line comments
