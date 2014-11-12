@@ -65,3 +65,12 @@ public str check(str string)
 	//	//case /^\t/ : count +=1;
 	//}
 }
+
+public int countComments(loc file){
+list[str] lines = readFileLines(file);
+  n = 0;
+  for(s <- lines)
+    if(/((\s|\/*)(\/\*|\s\*)|[^\w,\;]\s\/*\/)/ := s)   
+      n +=1;
+  return n;
+}
