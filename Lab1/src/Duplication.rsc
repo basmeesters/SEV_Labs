@@ -21,6 +21,7 @@ public list[str] GroupBlocks(loc path, int size) {
 	
 	for(line <- lines) {
 		tempBlock += line;
+		counter += 1;
 		// Group lines to defined block size
 		if(counter >= size) {
 			// add the block, reset temp vars
@@ -29,7 +30,7 @@ public list[str] GroupBlocks(loc path, int size) {
 			tempBlock = "";
 		}
 	}
-	if(counter > 0 && size(tempBlock) > 0)
+	if(counter > 0)
 		blocks += tempBlock; // add the rest of the code to a new block
 	return blocks;
 }
