@@ -7,54 +7,60 @@ import List;
 import IO;
 import String;
 
+public loc simple = |project://Hello|;
+public loc small = |project://smallsql0.21_src|;
 
-public map[loc, list[str]] UnitVolume(loc project)
+
+public map[loc, int] UnitVolume(loc project)
 {
 	set[Declaration] dcs = createAstsFromEclipseProject(project,true);
 	return UnitVolume(dcs);
 }
 
-public map[loc, list[str]] UnitVolume(set[Declaration] dcs)
+
+public map[loc, int] UnitVolume(set[Declaration] dcs)
 {
-	map[loc, list[str]] dict = ();
+	// /^.["].*[^\\].["]$/
+	map[loc, int] dict = ();
 	//println(dcs);
-	int count = 0;
 	for (d <- dcs)
 	{
 		list[str] lines = readFileLines(d@src);
 		visit (d) {
 			case a:\constructor(_,_,_,Statement s)	: 
 			{
-				tuple[list[str] a, int b, list[str] c] uv = UnitVolume2(a@src, lines, count);
-				count = uv.b;
-				dict += (a@src : uv.a); 
+				tuple[list[str] a, list[str] c] uv = UnitVolume2(a@src, lines);
+				dict += (a@src : size(uv.a)); 
 			}
 			case a:\method(_,_,_,_,Statement s) 	: 
 			{
-				tuple[list[str] a, int b, list[str] c] uv = UnitVolume2(a@src, lines, count);
-				count = uv.b;
-				dict += (a@src : uv.a); 
+				tuple[list[str] a, list[str] c] uv = UnitVolume2(a@src, lines);
+				dict += (a@src : size(uv.a)); 
 			}
-			case a:\method(_,_,_,_)					: dict += (a@decl : 1); 
+			case a:\method(_,_,_,_)					:  
+			{
+				tuple[list[str] a, list[str] c] uv = UnitVolume2(a@src, lines);
+				dict += (a@src : size(uv.a)); 
+			} 
 		}
 	}
 	return dict;
 }
 
-public tuple[list[str], int, list[str]] UnitVolume2(loc source, list[str] lines, int count)
+public tuple[list[str], list[str]] UnitVolume2(loc source, list[str] lines)
 {
 	int openCount = 0;
 	bool found = false;
-	list[str] newLines = drop(source.begin.line, lines);
+	list[str] newLines = drop(source.begin.line -1, lines);
 	bool comment = true;
-  	int c = 1;
   	list[str] code = [];
   	for (l <- newLines) {
   		line = trim(l);
-  		openCount += size(findAll("{", line));
-  		openCount -= size(findAll("}", line));
+  		openCount += size(findAll(line, "{"));
   		if (openCount > 0)
   			found = true;
+  		openCount -= size(findAll(line, "}"));
+  		//println("source:<source> count:<openCount>");
   		if (size(line) >= 2) {
 	  		str sub = substring(line, 0, 2);
 	  		if(sub := "//") {
@@ -68,16 +74,13 @@ public tuple[list[str], int, list[str]] UnitVolume2(loc source, list[str] lines,
 			}
 			else if (comment := true){
 				code += line;
-				c += 1;
 			}
 		}
 		else if (comment := true && size(line) >0) {
 			code += line;
-			c += 1;
 		}
 		if (openCount == 0 && found == true)
 			break;
   	}
-  	count += c;
-  return <code, count, newLines>;
+  return <code, newLines>;
 }
