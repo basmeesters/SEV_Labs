@@ -8,105 +8,125 @@ import IO;
 import Map;
 import Set;
 
-public map[tuple[int, int], str] CreateBlocks(loc path, int blockSize) {
-	list[str] code = CleanCode(path);
-	map[tuple[int, int], str] blocks = ();
+//public map[str, map[tuple[int, int], str]] LocDuplicates(loc dirPath, int blockSize) {
+public map[tuple[loc, int, int], str] LocDuplicates(loc dirPath, int blockSize) {
+	list[loc] files = getFiles(dirPath, "java");
+	map[tuple[loc, int, int], str] blocks = ();
+	for(file <- files)
+		blocks += CreateBlocks(file, blockSize);
+	//println(blocks);
+	//return ();
+	return FindDuplicates(blocks);
+}
+
+public int LocDuplicatesCount(loc dirPath, int blockSize) {
+	list[loc] files = getFiles(dirPath, "java");
+	map[tuple[loc, int, int], str] blocks = ();
+	for(file <- files)
+		blocks += CreateBlocks(file, blockSize);
+	return CountDuplicates(blocks);
+}
+
+public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str fileExt, int blockSize) {
+	list[loc] files = getFiles(dirPath, fileExt);
+	map[str, list[tuple[loc, int, int]]] blocks = ();
+	map[str, list[tuple[loc, int, int]]] duplicates = ();
+	
+	for(filePath <- files) {
+		list[str] code = CleanCode(filePath);
+		str tempBlock = "";
+		list[tuple[loc, int, int]] tempList = [];
+		
+		int lineIndex = 0;
+		int codeSize = size(code);
+		bool isBreak = false;
+	
+		for(line <- code) {
+			// create blocks
+			for(i <- [0..blockSize]) {
+				if(i+lineIndex < codeSize)
+					tempBlock += code[i+lineIndex];
+				else { // if max line is reached. we can stop (otherwise it will create block with smaller than defined size
+					isBreak = true;
+					break;
+				}
+			}
+			if(isBreak == true) {
+				isBreak = false;
+				break;
+			}
+			
+			if(tempBlock notin blocks)
+				blocks += (tempBlock: [<filePath, lineIndex, lineIndex+blockSize>]);
+			else { // if is duplicate, add his location / update key
+				tempList =  blocks[tempBlock];
+				tempList += <filePath, lineIndex, lineIndex+blockSize>;
+				if(tempBlock in duplicates)
+					duplicates = delete(duplicates, tempBlock);
+				duplicates += (tempBlock: tempList);
+			}
+			tempBlock = "";
+			tempList = [];
+			lineIndex += 1;
+		}
+	}
+	return duplicates;
+}
+
+public map[tuple[loc, int, int], str] CreateBlocks(loc filePath, int blockSize) {
+	list[str] code = CleanCode(filePath);
+	map[tuple[loc, int, int], str] blocks = ();
 	str tempBlock = "";
 	int lineIndex = 0;
 	int codeSize = size(code);
-	
+	bool isBreak = false;
+
 	for(line <- code) {
 		// create blocks
 		for(i <- [0..blockSize]) {
 			if(i+lineIndex < codeSize)
 				tempBlock += code[i+lineIndex];
+			else { // if max line is reached. we can stop (otherwise it will create block with smaller than defined size
+				isBreak = true;
+				break;
+			}
 		}
-		blocks += (<lineIndex, lineIndex+blockSize> : tempBlock);
+		if(isBreak == true) {
+			isBreak = false;
+			break;
+		}
+		blocks += (<filePath, lineIndex, lineIndex+blockSize> : tempBlock);
 		tempBlock = "";
 		lineIndex += 1;
 	}
 	return blocks;
 }
 
-//public map[str, tuple[int, int]] FindDuplicates(map[str, tuple[int, int]] blocks) {
-public map[tuple[int, int], str] FindDuplicates(map[tuple[int, int], str] blocks) {
-	//list[str] blocksList = [blocks[v] | _:v <- blocks];
-	map[tuple[int, int], str] duplicates = ();
+public int CountDuplicates(map[tuple[loc, int, int], str] blocks) {
+	list[str] blocksList = [blocks[v] | v <- blocks];
+	int sizeOrg = size(blocksList);
+	int sizeFiltered = size(dup(blocksList));
+	return (sizeOrg-sizeFiltered);
+}
+
+public map[tuple[loc, int, int], str] FindDuplicates(map[tuple[loc, int, int], str] blocks) {
+	map[tuple[loc, int, int], str] duplicates = ();
 	int blockIndex = 0;
 	
-	for(k <- blocks)//, v <- [ blocks[v] | v <- blocks]) {
-	{
+	for(k <- blocks) {
 		v = blocks[k];
-		//println("k = <k> \n\r\n\r");
 		blocks = delete(blocks, k);
-		//println("v2 = <searchStack>\n\r\n\r");
-		for(vStack <- [ blocks[vStack] | vStack <- blocks]) {
-			//println("<vStack> =? <v>\n\r");
+		//println("k: <k>");
+		for(kStack <- blocks) { 
+			vStack = blocks[kStack];
 			if(vStack == v) {
 				duplicates += (k:v);
-				blocks = delete(blocks, k);
+				duplicates += (kStack:vStack);
+				//println("kStack: <kStack>");
+				//blocks = delete(blocks, kStack);
 			}
 		}
 		blockIndex += 1;
 	}
 	return duplicates;
-	
-	//int countOrg = size(blocksList);
-	//list[str] blocksListNew = dup(blocksList);
-	//int countNew = size(blocksListNew);
-	//return (countOrg - countNew);
-}
-
-// public map[str, tuple[int, int]] FindDuplicates(loc path, int size) {
-//public tuple[str, int] FindDuplicates(loc path, int dupSize) {
-//public str FindDuplicates(loc path, int dupSize) {
-//	list[str] code = CleanCode(path);
-//	int lineIndex = 0;
-//	//map[str, int] x = [];
-//	list[str] tempBlocks = [];
-//	for(line <- code) {
-//		for(i <- [0..dupSize]) {
-//			if(i+lineIndex <= size(code))
-//				tempBlock += code[i+lineIndex];
-//		}
-//		code = delete(code, lineIndex);
-//		
-//	}
-//}
-
-//public int FindLines(list[str] block, list[str] code) {
-//	int lineNumber = 0;
-//	for(codeLine <- code) {
-//		for(line <- block) {
-//			if(codeLine == line) {
-//				FindLines
-//			}
-//			lineNumber += 1;
-//		}
-//	}
-//	return -1;
-//}
-
-
-// |project://Hello/src/testPack/Main.java|
-public list[str] GroupBlocks(loc path, int size) {
-	list[str] lines = readFileLines(path);
-	list[str] blocks = [];
-	str tempBlock = "";
-	int counter = 0;
-	
-	for(line <- lines) {
-		tempBlock += line;
-		counter += 1;
-		// Group lines to defined block size
-		if(counter >= size) {
-			// add the block, reset temp vars
-			blocks += tempBlock;
-			counter = 0;
-			tempBlock = "";
-		}
-	}
-	if(counter > 0)
-		blocks += tempBlock; // add the rest of the code to a new block
-	return blocks;
 }
