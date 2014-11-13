@@ -8,6 +8,7 @@ import lang::java::m3::Core;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import Evaluate;
+import Risk;
 
 // Projects
 public loc simple = |project://Hello|;
@@ -33,9 +34,11 @@ public list[str] Extract(loc project, str ext)
 	// Cyclomatic complexity per unit
 	set[Declaration] dcls = createAstsFromEclipseProject(project,true);
 	map[loc, int] complexity = Complexity(dcls);
-	map[str, real] riskLevel = RiskPercentage(dcls, volume, totalVolume);
+	map[str, real] riskLevelComplexity = RiskComplexity(dcls, volume, totalVolume);
+	map[str, real] riskLevelVolume = RiskVolume(volume, totalVolume);
 	
 	str volumeEvaluated = EvaluateVolume(totalVolume);
-	str complexityEvaluated = EvaluateComplexity(riskLevel);
-	return [volumeEvaluated, complexityEvaluated];
+	str complexityEvaluated = EvaluateTable(riskLevelComplexity);
+	str volumeUnitEvaluated = EvaluateTable(riskLevelVolume);
+	return [volumeEvaluated, complexityEvaluated, volumeUnitEvaluated];
 }

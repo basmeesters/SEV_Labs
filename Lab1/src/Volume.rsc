@@ -4,6 +4,7 @@ import CodeLines;
 import FilesHandling;
 import String;
 import List;
+import IO;
 
 // Get the lines of code of a project
 public map[loc, list[str]] CodeUnits(loc project, str ext) 
@@ -11,9 +12,8 @@ public map[loc, list[str]] CodeUnits(loc project, str ext)
 	map[loc, list[str]] dictionary =();
 	list[loc] files = getFiles(project, ext);
 	for (f <- files) {
-		dictionary += (f: LinesOfCode(f));
+		dictionary += (f: CleanCode(f));
 	}
-	codeUnits = dictionary;
 	return dictionary;
 }
 

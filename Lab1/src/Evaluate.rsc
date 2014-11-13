@@ -23,7 +23,7 @@ public str EvaluateVolume(int amount)
 	return evaluation;
 }
 
-public str EvaluateComplexity(map[str, real] table)
+public str EvaluateTable(map[str, real] table)
 {
 	str evaluation;
 	if (table["Very high risk"] == 0 && table["High risk"] == 0 && table["Moderate risk"] <= 25)

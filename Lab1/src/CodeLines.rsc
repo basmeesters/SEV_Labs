@@ -8,7 +8,7 @@ import IO;
 import ParseTree;
 import String;
 
-// Calculate the lines of code given a string
+// Give the actual lines of code given a string by removing comments and blank lines
 public list[str] CleanCode(loc path) 
 {
 	list[str] lines = readFileLines(path);
@@ -39,38 +39,4 @@ public list[str] CleanCode(loc path)
 		}
   	}
   return code;
-}
-
-// Not being used at all now
-public str check(str string) 
-{ 
-	int count = 0;
-	str newString = "";
-	result = "";
-	while (/^<before:[^\r\n]><after:.*$>/ := string) { 
-    	result = result +  + "\n";
-    	string = after;
-    }
-	return result;
-		//visit(string)
-	//{
-	//	//case /^\r\n/ : count +1;
-	//	//case /^\n\r/ : count +1;
-	//	//case /^\r/ : count +=1;
-	//	//case /^\n/ : count +=1;
-	//	//case /^.*<guy:\r\n|\n\r|\r|\n>.*/ : println(guy);
-	//	 case /^<before:^\n\r|^\^r\n|^\r|><white:\n\r|\r\n|\r|>/ : {newString + before;}
-	//	// case /^\n\r/ : count +=1;
-	//	//case /^\s/ : count +=1;
-	//	//case /^\t/ : count +=1;
-	//}
-}
-
-public int countComments(loc file){
-list[str] lines = readFileLines(file);
-  n = 0;
-  for(s <- lines)
-    if(/((\s|\/*)(\/\*|\s\*)|[^\w,\;]\s\/*\/)/ := s)   
-      n +=1;
-  return n;
 }
