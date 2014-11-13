@@ -7,6 +7,11 @@ import CodeLines;
 import Volume;
 import FilesHandling;
 
+
+public str EvaluateDuplicates(int duplicates, int linesOfCode) {
+	
+}
+
 public str EvaluateVolume(int amount)
 {
 	str evaluation;

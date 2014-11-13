@@ -9,6 +9,7 @@ import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import Evaluate;
 import Risk;
+import Duplication;
 
 // Projects
 public loc simple = |project://Hello|;
@@ -37,8 +38,13 @@ public list[str] Extract(loc project, str ext)
 	map[str, real] riskLevelComplexity = RiskComplexity(dcls, volume, totalVolume);
 	map[str, real] riskLevelVolume = RiskVolume(volume, totalVolume);
 	
+	// duplications
+	map[str, list[tuple[loc, int, int]]] duplications = DuplicatesAnalyzer(project, ext, 6);
+	int totalDups = DuplicateLinesCounter(duplications);
+	
+	str duplicationEvaluated = EvaluateDuplicates(totalDups, totalVolume);
 	str volumeEvaluated = EvaluateVolume(totalVolume);
 	str complexityEvaluated = EvaluateTable(riskLevelComplexity);
 	str volumeUnitEvaluated = EvaluateTable(riskLevelVolume);
-	return [volumeEvaluated, complexityEvaluated, volumeUnitEvaluated];
+	return [volumeEvaluated, complexityEvaluated, volumeUnitEvaluated, duplicationEvaluated];
 }

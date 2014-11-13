@@ -8,6 +8,21 @@ import IO;
 import Map;
 import Set;
 
+public int DuplicateLinesCounter(map[str, list[tuple[loc a, int b, int c]]] duplicates) {
+	int counter = 0;
+	for(dupKey <- duplicates) {
+		dupValues = duplicates[dupKey];
+		for(dupVal <- dupValues){
+			//filePath = dupVal.a;
+			fromLine = dupVal.b;
+			toLine = dupVal.c;
+			lines = toLine-fromLine;
+			counter += lines;
+		}
+	}
+	return counter;
+}
+
 public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str fileExt, int blockSize) {
 	list[loc] files = getFiles(dirPath, fileExt);
 	map[str, list[tuple[loc, int, int]]] blocks = ();
