@@ -34,14 +34,18 @@ public map[tuple[int, int], str] FindDuplicates(map[tuple[int, int], str] blocks
 	map[tuple[int, int], str] duplicates = ();
 	int blockIndex = 0;
 	
-	for(k <- [ k | k <- blocks], v <- [ blocks[v] | v <- blocks]) {
+	for(k <- blocks)//, v <- [ blocks[v] | v <- blocks]) {
+	{
+		v = blocks[k];
 		//println("k = <k> \n\r\n\r");
-		map[tuple[int, int], str] searchStack = delete(blocks, k);
+		blocks = delete(blocks, k);
 		//println("v2 = <searchStack>\n\r\n\r");
-		for(vStack <- [ searchStack[vStack] | vStack <- searchStack]) {
+		for(vStack <- [ blocks[vStack] | vStack <- blocks]) {
 			//println("<vStack> =? <v>\n\r");
-			if(vStack == v)
+			if(vStack == v) {
 				duplicates += (k:v);
+				blocks = delete(blocks, k);
+			}
 		}
 		blockIndex += 1;
 	}
