@@ -8,25 +8,6 @@ import IO;
 import Map;
 import Set;
 
-//public map[str, map[tuple[int, int], str]] LocDuplicates(loc dirPath, int blockSize) {
-public map[tuple[loc, int, int], str] LocDuplicates(loc dirPath, int blockSize) {
-	list[loc] files = getFiles(dirPath, "java");
-	map[tuple[loc, int, int], str] blocks = ();
-	for(file <- files)
-		blocks += CreateBlocks(file, blockSize);
-	//println(blocks);
-	//return ();
-	return FindDuplicates(blocks);
-}
-
-public int LocDuplicatesCount(loc dirPath, int blockSize) {
-	list[loc] files = getFiles(dirPath, "java");
-	map[tuple[loc, int, int], str] blocks = ();
-	for(file <- files)
-		blocks += CreateBlocks(file, blockSize);
-	return CountDuplicates(blocks);
-}
-
 public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str fileExt, int blockSize) {
 	list[loc] files = getFiles(dirPath, fileExt);
 	map[str, list[tuple[loc, int, int]]] blocks = ();
@@ -71,6 +52,30 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 		}
 	}
 	return duplicates;
+}
+
+
+/*
+* OLD FUNCTIONS - not relevant for the above
+*/
+
+//public map[str, map[tuple[int, int], str]] LocDuplicates(loc dirPath, int blockSize) {
+public map[tuple[loc, int, int], str] LocDuplicates(loc dirPath, int blockSize) {
+	list[loc] files = getFiles(dirPath, "java");
+	map[tuple[loc, int, int], str] blocks = ();
+	for(file <- files)
+		blocks += CreateBlocks(file, blockSize);
+	//println(blocks);
+	//return ();
+	return FindDuplicates(blocks);
+}
+
+public int LocDuplicatesCount(loc dirPath, int blockSize) {
+	list[loc] files = getFiles(dirPath, "java");
+	map[tuple[loc, int, int], str] blocks = ();
+	for(file <- files)
+		blocks += CreateBlocks(file, blockSize);
+	return CountDuplicates(blocks);
 }
 
 public map[tuple[loc, int, int], str] CreateBlocks(loc filePath, int blockSize) {
