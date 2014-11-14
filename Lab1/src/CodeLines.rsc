@@ -12,11 +12,21 @@ import String;
 public list[str] CleanCode(loc path) 
 {
 	list[str] lines = readFileLines(path);
+	return CleanCode(lines, 0, size(lines) - 1);
+}
+
+public list[str] CleanCode(list[str] lines, int beginLine, int endLine) 
+{
 	// Bool used for multi-line comments
   	bool comment = true;
   	
   	list[str] code = [];
-  	for (l <- lines) {
+  	list[str] newLines;
+  	if (beginLine > 0)
+  		newLines = take(endLine - (beginLine -1), (drop(beginLine - 1, lines)));
+	else
+		newLines = lines;
+  	for (l <- newLines) {
   		line = trim(l);
   		
   		if (size(line) >= 2) {

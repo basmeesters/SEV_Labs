@@ -5,6 +5,9 @@ import FilesHandling;
 import String;
 import List;
 import IO;
+import lang::java::m3::Core;
+import lang::java::jdt::m3::Core;
+import lang::java::jdt::m3::AST;
 
 // Get the lines of code of a project
 public map[loc, list[str]] CodeUnits(loc project, str ext) 
@@ -36,19 +39,44 @@ public int CountCode(map[loc, int] codeUnits)
 	return total;
 }
 
-// Get the amount of lines of code per unit
-public map[loc,int] CountUnits(loc project, str ext)
+public map[loc, int] CountUnits(loc project)
 {
-	codeUnits = CodeUnits(project, ext);
-	return CountUnits(codeUnits);
+	set[Declaration] dcs = createAstsFromEclipseProject(project,true);
+	return CountUnits(dcs);
 }
 
-public map[loc,int] CountUnits(map[loc, list[str]] codeUnits)
+
+public map[loc, int] CountUnits(set[Declaration] dcs)
 {
-	map[loc, int] m = ();
-	for (c <- codeUnits)
+	map[loc, int] dict = ();
+	int startLine;
+	int endLine;
+	for (d <- dcs)
 	{
-		m += (c: size(codeUnits[c]));
+		list[str] lines = readFileLines(d@src);
+		visit (d) {
+			case a:\constructor(_,_,_,Statement s)	: 
+			{
+				startLine = a@src.begin.line;
+				endLine = a@src.end.line;
+				list[str] uv = CleanCode(lines, startLine, endLine);
+				dict += (a@src : size(uv)); 
+			}
+			case a:\method(_,_,_,_,Statement s) 	: 
+			{
+				startLine = a@src.begin.line;
+				endLine = a@src.end.line;
+				list[str] uv = CleanCode(lines, startLine, endLine);
+				dict += (a@src : size(uv)); 
+			}
+			case a:\method(_,_,_,_)					:  
+			{
+				startLine = a@src.begin.line;
+				endLine = a@src.end.line;
+				list[str] uv = CleanCode(lines, startLine, endLine);
+				dict += (a@src : size(uv)); 
+			} 
+		}
 	}
-	return m;
+	return dict;
 }

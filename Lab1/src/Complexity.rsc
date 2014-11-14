@@ -21,8 +21,8 @@ public map[loc, int] Complexity(set[Declaration] dcs)
 	for (d <- dcs)
 	{
 		visit (d) {
-			case a:\constructor(_,_,_,Statement s)	: {println(a); dict += (a@decl : complexityMethod(s)); }
-			case a:\method(_,_,_,_,Statement s) 	: {println(a); dict += (a@decl : complexityMethod(s)); }
+			case a:\constructor(_,_,_,Statement s)	: dict += (a@decl : complexityMethod(s)); 
+			case a:\method(_,_,_,_,Statement s) 	: dict += (a@decl : complexityMethod(s)); 
 			case a:\method(_,_,_,_)					: dict += (a@decl : 1); 
 		}
 	}

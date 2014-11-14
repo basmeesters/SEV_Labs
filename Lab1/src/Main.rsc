@@ -27,7 +27,7 @@ public list[str] Extract(loc project, str ext)
 	map[loc, list[str]] codeUnits = CodeUnits(project, ext);
 	
 	// Lines of code per unit
-	map[loc, int] volume = CountUnits(codeUnits);
+	map[loc, int] volume = CountUnits(project);
 	
 	//Lines of code total
 	int totalVolume = CountCode(codeUnits);
@@ -35,8 +35,8 @@ public list[str] Extract(loc project, str ext)
 	// Cyclomatic complexity per unit
 	set[Declaration] dcls = createAstsFromEclipseProject(project,true);
 	map[loc, int] complexity = Complexity(dcls);
-	map[str, real] riskLevelComplexity = RiskComplexity(dcls, volume, totalVolume);
-	map[str, real] riskLevelVolume = RiskVolume(volume, totalVolume);
+	//map[str, real] riskLevelComplexity = RiskComplexity(dcls, volume, totalVolume);
+	//map[str, real] riskLevelVolume = RiskVolume(volume, totalVolume);
 	
 	// duplications
 	map[str, list[tuple[loc, int, int]]] duplications = DuplicatesAnalyzer(project, ext, 6);
@@ -44,7 +44,7 @@ public list[str] Extract(loc project, str ext)
 	
 	str duplicationEvaluated = EvaluateDuplicates(totalDups, totalVolume);
 	str volumeEvaluated = EvaluateVolume(totalVolume);
-	str complexityEvaluated = EvaluateTable(riskLevelComplexity);
-	str volumeUnitEvaluated = EvaluateTable(riskLevelVolume);
-	return [volumeEvaluated, complexityEvaluated, volumeUnitEvaluated, duplicationEvaluated];
+	//str complexityEvaluated = EvaluateTable(riskLevelComplexity);
+	//str volumeUnitEvaluated = EvaluateTable(riskLevelVolume);
+	return [volumeEvaluated, duplicationEvaluated];
 }
