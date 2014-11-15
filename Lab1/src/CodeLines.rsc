@@ -1,11 +1,7 @@
 module CodeLines
 
-import lang::java::m3::Core;
-import lang::java::jdt::m3::Core;
-import lang::java::jdt::m3::AST;
 import List;
 import IO;
-import ParseTree;
 import String;
 
 // Give the actual lines of code given a string by removing comments and blank lines

@@ -7,21 +7,33 @@ import CodeLines;
 import Volume;
 import FilesHandling;
 
+list[int] bordersVolume = [66000, 246000, 665000, 1310000];
+list[int] bordersDuplication = [3, 5, 10, 20];
 
-public str EvaluateDuplicates(int duplicates, int linesOfCode) {
-	
+public str EvaluateDuplicates(int amount)
+{
+	return EvaluateList(amount, bordersDuplication);
+}
+
+public str EvaluateDuplicates(int amount, list borders) {
+	return EvaluateList(amount, borders);
 }
 
 public str EvaluateVolume(int amount)
 {
+	return Evaluatelist(amount, bordersVolume);
+}
+
+public str EvaluateList(int amount, list[int] borders)
+{
 	str evaluation;
-	if (amount < 66000)
+	if (amount < borders[0])
 		evaluation = "++";
-	else if (amount < 246000)
+	else if (amount < borders[1])
 		evaluation = "+";
-	else if (amount < 665000)
+	else if (amount < borders[2])
 		evaluation = "0";
-	else if (amount < 1310000)
+	else if (amount < borders[3])
 		evaluation = "-";
 	else
 		evaluation = "--";

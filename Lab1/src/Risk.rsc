@@ -35,15 +35,15 @@ public list[int] ComplexityMetrics = [10, 20, 50];
 
 public map[str, real] RiskVolume(map[loc, int] units, int total)
 {
-	return RiskPercentage(RiskTable(units, VolumeUnitsMetrics), total);
+	return RiskPercentage(RiskTable(units, VolumeUnitsMetrics), units, total);
 }
 
-public map[str, real] RiskComplexity(set[Declaration] dcs, map[loc, int] units, int total)
+public map[str, real] RiskComplexity(map[loc, int] complexity, map[loc, int] units, int total)
 {
-	return RiskPercentage(RiskTable(Complexity(dcs), ComplexityMetrics), total);
+	return RiskPercentage(RiskTable(complexity, ComplexityMetrics), units, total);
 }
 
-public map[str, real] RiskPercentage(map[loc, int] riskTable, int total)
+public map[str, real] RiskPercentage(map[loc, int] riskTable, map[loc, int] units, int total)
 {
 	real veryHighRisk = 0.0;
 	real highRisk = 0.0;
@@ -51,8 +51,7 @@ public map[str, real] RiskPercentage(map[loc, int] riskTable, int total)
 	real noRisk = 0.0;
 	for (i <- riskTable)
 	{
-		list[str] code = CleanCode(i);
-		int size = size(code);
+		int size = units[i];
 		real lineAmount = toReal(size); // This needs some change..
 		if (riskTable[i] == 3)
 			veryHighRisk += (lineAmount / total) * 100;

@@ -10,10 +10,10 @@ import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 
 // Get the lines of code of a project
-public map[loc, list[str]] CodeUnits(loc project, str ext) 
+public map[loc, list[str]] CodeUnits(loc project) 
 {
 	map[loc, list[str]] dictionary =();
-	list[loc] files = getFiles(project, ext);
+	list[loc] files = getFiles(project, "java");
 	for (f <- files) {
 		dictionary += (f: CleanCode(f));
 	}
