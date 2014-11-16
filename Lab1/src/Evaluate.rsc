@@ -9,19 +9,20 @@ import FilesHandling;
 
 list[int] bordersVolume = [66000, 246000, 665000, 1310000];
 list[int] bordersDuplication = [3, 5, 10, 20];
+list[int] bordersTesting = [20, 60, 80, 95];
 
 public str EvaluateDuplicates(int amount)
 {
 	return EvaluateList(amount, bordersDuplication);
 }
 
-public str EvaluateDuplicates(int amount, list borders) {
+public str EvaluateDuplicates(int amount, list[int] borders) {
 	return EvaluateList(amount, borders);
 }
 
 public str EvaluateVolume(int amount)
 {
-	return Evaluatelist(amount, bordersVolume);
+	return EvaluateList(amount, bordersVolume);
 }
 
 public str EvaluateList(int amount, list[int] borders)
@@ -40,6 +41,22 @@ public str EvaluateList(int amount, list[int] borders)
 	return evaluation;
 }
 
+public str EvaluateListReverse(int amount, list[int] borders)
+{
+	str evaluation;
+	if (amount < borders[0])
+		evaluation = "--";
+	else if (amount < borders[1])
+		evaluation = "-";
+	else if (amount < borders[2])
+		evaluation = "0";
+	else if (amount < borders[3])
+		evaluation = "+";
+	else
+		evaluation = "++";
+	return evaluation;
+}
+
 public str EvaluateTable(map[str, real] table)
 {
 	str evaluation;
@@ -55,4 +72,3 @@ public str EvaluateTable(map[str, real] table)
 		evaluation = "--";
 	return evaluation;
 }
-	

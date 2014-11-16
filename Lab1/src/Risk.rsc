@@ -52,7 +52,7 @@ public map[str, real] RiskPercentage(map[loc, int] riskTable, map[loc, int] unit
 	for (i <- riskTable)
 	{
 		int size = units[i];
-		real lineAmount = toReal(size); // This needs some change..
+		real lineAmount = toReal(size); 
 		if (riskTable[i] == 3)
 			veryHighRisk += (lineAmount / total) * 100;
 		else if (riskTable[i] == 2)
