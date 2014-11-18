@@ -7,12 +7,12 @@ import CodeLines;
 import Volume;
 import FilesHandling;
 
+// Standard borders to evaluate total size, duplication amount and testing coverage
 list[int] bordersVolume = [66000, 246000, 665000, 1310000];
 list[int] bordersDuplication = [3, 5, 10, 20];
 list[int] bordersTesting = [20, 60, 80, 95];
 
-public str EvaluateDuplicates(int amount)
-{
+public str EvaluateDuplicates(int amount) {
 	return EvaluateList(amount, bordersDuplication);
 }
 
@@ -20,13 +20,12 @@ public str EvaluateDuplicates(int amount, list[int] borders) {
 	return EvaluateList(amount, borders);
 }
 
-public str EvaluateVolume(int amount)
-{
+public str EvaluateVolume(int amount) {
 	return EvaluateList(amount, bordersVolume);
 }
 
-public str EvaluateList(int amount, list[int] borders)
-{
+// Evaluate a value based on a list of given borders
+public str EvaluateList(int amount, list[int] borders) {
 	str evaluation;
 	if (amount < borders[0])
 		evaluation = "++";
@@ -41,6 +40,7 @@ public str EvaluateList(int amount, list[int] borders)
 	return evaluation;
 }
 
+// Evaluate a list based on a list of given borders, but in reverse order (needed for testing range)
 public str EvaluateListReverse(int amount, list[int] borders)
 {
 	str evaluation;
@@ -57,6 +57,7 @@ public str EvaluateListReverse(int amount, list[int] borders)
 	return evaluation;
 }
 
+// Evaluate a table
 public str EvaluateTable(map[str, real] table)
 {
 	str evaluation;

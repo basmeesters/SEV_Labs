@@ -1,69 +1,48 @@
 module Risk
 
-import CodeLines;
-import FilesHandling;
-import String;
-import Volume;
-import List;
-import Complexity;
-import IO;
 import util::Math;
 import lang::java::m3::Core;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
+import IO;
 
-// For debugging
-//
-public map[str, real] RiskVolume(loc project)
-{
-	map[loc, int] codeCount = CountUnits(project, "java");
-	return RiskVolume(codeCount, CountCode(codeCount));
-}
-
-public map[str, real] RiskComplexity(loc project)
-{
-	set[Declaration] dcs = createAstsFromEclipseProject(project,true);
-	map[loc, int] codeCount = CountUnits(project, "java");
-	return RiskComplexity(dcs, codeCount, CountCode(codeCount));
-}
-//
-// End debugging
-
+// Standard lists of how to divide amounts in categories for volume and complexity
 public list[int] VolumeUnitsMetrics = [20, 50, 100];
 public list[int] ComplexityMetrics = [10, 20, 50];
 
-
-public map[str, real] RiskVolume(map[loc, int] units, int total)
-{
+public map[str, real] RiskVolume(map[loc, int] units, int total) {
 	return RiskPercentage(RiskTable(units, VolumeUnitsMetrics), units, total);
 }
 
-public map[str, real] RiskComplexity(map[loc, int] complexity, map[loc, int] units, int total)
-{
+public map[str, real] RiskComplexity(map[loc, int] complexity, map[loc, int] units, int total) {
 	return RiskPercentage(RiskTable(complexity, ComplexityMetrics), units, total);
 }
 
-public map[str, real] RiskPercentage(map[loc, int] riskTable, map[loc, int] units, int total)
-{
+public map[str, real] RiskPercentage(map[loc, int] riskTable, map[loc, int] units, int total){
 	real veryHighRisk = 0.0;
 	real highRisk = 0.0;
 	real risk = 0.0;
 	real noRisk = 0.0;
+	real totalAmount = 0.0;
 	for (i <- riskTable)
 	{
 		int size = units[i];
 		real lineAmount = toReal(size); 
+		real percentage = (lineAmount / total) * 100;
 		if (riskTable[i] == 3)
-			veryHighRisk += (lineAmount / total) * 100;
+			veryHighRisk += percentage;
 		else if (riskTable[i] == 2)
-			highRisk += (lineAmount / total) * 100;
+			highRisk += percentage;
 		else if (riskTable[i] == 1)
-			risk += (lineAmount / total) * 100;
+			risk += percentage;
 		else {
-			noRisk += (lineAmount / total)* 100; 
+			noRisk += percentage; 
+		totalAmount += percentage;
 		}
 	}
-	
+	println("total:<totalAmount>");
+	noRisk += (100.00 - totalAmount);
+	// If the totalAmount is not 100% it is probably because of import and field lines which are in the noRisk category
 	return ("No risk":noRisk, "Moderate risk":risk, "High risk":highRisk, "Very high risk":veryHighRisk);
 }
 
