@@ -96,68 +96,8 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 		println("=====\n\rcreate pairs");
 		timer = now();
 	// timerEnd
-	
-	// create all location pairs possibilities of duplicate for comparison
-	// 1,2,3 = 1:2 , 1:3 , 2:3
-	list[tuple[tuple[loc a1, int a2, int a3] A, tuple[loc b1, int b2, int b3] B]] dupsPairs = [];
-	map[str, list[tuple[loc a, int b, int c]]] aggDups = ();
-	list[str] tempCodeA = [];
-	list[str] tempCodeB = [];
-	str tempLineA = "";
-	str tempLineB = "";
-	int nextlineA = 0;
-	int nextlineB = 0;
-	int lineSucc = 1;
-	for(dupKey <- duplicates) {
-		dupValues = duplicates[dupKey]; // single duplicate
-		//println(dupValues);
-		dupsPairs = listPairs(dupValues);
-		for(pair <- dupsPairs) {
-			tempCodeA = filesWithDups[pair.A.a1];
-			tempCodeB = filesWithDups[pair.B.b1];
-			
-			if(tempCodeA[pair.A.a3] != tempCodeB[pair.B.b3]) // just verification control / debugging. must be equal.
-				throw "Error occured!";
 
-			tempBlock = dupKey;
-			lineSucc = 1;
-			while(true) {  // lets check if also next lines are equal (out of block size)
-				nextlineA = pair.A.a3+lineSucc;
-				nextlineB = pair.B.b3+lineSucc;
-				//println("<size(tempCodeA)> \< <nextlineA>");
-				if(size(tempCodeA)-1 < nextlineA || size(tempCodeB)-1 < nextlineB) // if no more code lines
-					break;
-				tempLineA = tempCodeA[nextlineA]; // last line of duplicated code identified + 1
-				tempLineB = tempCodeB[nextlineB];
-				//println("<pair.A.a3> : <tempLineA> ?= <pair.B.b3> : <tempLineB>");
-				if(tempLineA != tempLineB)
-					break;
-					
-				tempBlock += tempLineA;	// A & B are the same. doesn't matter who we add
-				
-				// println("<pair.A.a2> - <pair.A.a3+lineSucc> : <pair.B.b2> - <pair.B.b3+lineSucc>");
-				lineSucc += 1;
-			}
-			
-			tempList = [];
-			if(tempBlock in aggDups) {
-				// get previous aggregated duplicates from map
-				tempList = aggDups[tempBlock];
-				aggDups = delete(aggDups, tempBlock);
-			}
-			// insert to aggregated duplicates map
-			tempList += <pair.A.a1, pair.A.a2, nextlineA-1>;
-			tempList += <pair.B.b1, pair.B.b2, nextlineB-1>;
-			tempList = dup(tempList);
-			aggDups += (tempBlock : tempList);
-			
-			//println("<pair.A.a2> - <pair.A.a3+lineSucc> : <pair.B.b2> - <pair.B.b3+lineSucc>");
-			
-			// reset params
-			tempList = [];
-			tempBlock = "";
-		}
-	}
+	map[str, list[tuple[loc a, int b, int c]]] aggDups = expandDupBlocks(duplicates, filesWithDups);
 	
 	println(now()-timer);
 	println("=====\n\rremove overlaps");
@@ -224,6 +164,71 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 	println("===\n\rdone. Total time: <now()-totaltime>");
 	
 	//return duplicates;
+	return aggDups;
+}
+
+public map[str, list[tuple[loc, int, int]]] expandDupBlocks(map[str, list[tuple[loc a, int b, int c]]] duplicates, map[loc, list[str]] filesWithDups) {
+	// create all location pairs possibilities of duplicate for comparison
+	// 1,2,3 = 1:2 , 1:3 , 2:3
+	list[tuple[tuple[loc a1, int a2, int a3] A, tuple[loc b1, int b2, int b3] B]] dupsPairs = [];
+	map[str, list[tuple[loc a, int b, int c]]] aggDups = ();
+	list[str] tempCodeA = [];
+	list[str] tempCodeB = [];
+	str tempLineA = "";
+	str tempLineB = "";
+	int nextlineA = 0;
+	int nextlineB = 0;
+	int lineSucc = 1;
+	for(dupKey <- duplicates) {
+		dupValues = duplicates[dupKey]; // single duplicate
+		//println(dupValues);
+		dupsPairs = listPairs(dupValues);
+		for(pair <- dupsPairs) {
+			tempCodeA = filesWithDups[pair.A.a1];
+			tempCodeB = filesWithDups[pair.B.b1];
+			
+			if(tempCodeA[pair.A.a3] != tempCodeB[pair.B.b3]) // just verification control / debugging. must be equal.
+				throw "Error occured!";
+
+			tempBlock = dupKey;
+			lineSucc = 1;
+			while(true) {  // lets check if also next lines are equal (out of block size)
+				nextlineA = pair.A.a3+lineSucc;
+				nextlineB = pair.B.b3+lineSucc;
+				//println("<size(tempCodeA)> \< <nextlineA>");
+				if(size(tempCodeA)-1 < nextlineA || size(tempCodeB)-1 < nextlineB) // if no more code lines
+					break;
+				tempLineA = tempCodeA[nextlineA]; // last line of duplicated code identified + 1
+				tempLineB = tempCodeB[nextlineB];
+				//println("<pair.A.a3> : <tempLineA> ?= <pair.B.b3> : <tempLineB>");
+				if(tempLineA != tempLineB)
+					break;
+					
+				tempBlock += tempLineA;	// A & B are the same. doesn't matter who we add
+				
+				// println("<pair.A.a2> - <pair.A.a3+lineSucc> : <pair.B.b2> - <pair.B.b3+lineSucc>");
+				lineSucc += 1;
+			}
+			
+			tempList = [];
+			if(tempBlock in aggDups) {
+				// get previous aggregated duplicates from map
+				tempList = aggDups[tempBlock];
+				aggDups = delete(aggDups, tempBlock);
+			}
+			// insert to aggregated duplicates map
+			tempList += <pair.A.a1, pair.A.a2, nextlineA-1>;
+			tempList += <pair.B.b1, pair.B.b2, nextlineB-1>;
+			tempList = dup(tempList);
+			aggDups += (tempBlock : tempList);
+			
+			//println("<pair.A.a2> - <pair.A.a3+lineSucc> : <pair.B.b2> - <pair.B.b3+lineSucc>");
+			
+			// reset params
+			tempList = [];
+			tempBlock = "";
+		}
+	}
 	return aggDups;
 }
 
