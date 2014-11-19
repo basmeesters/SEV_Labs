@@ -27,14 +27,17 @@ public int DuplicateLinesCounter(map[str, list[tuple[loc a, int b, int c]]] dupl
 
 public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str fileExt, int blockSize) {
 
-	timer = now();
-	println("=====\n\rfind duplicates area");
-	
+	// timer
+		totaltime = now();
+		timer = now();
+		println("=====\n\rfind duplicates area"); // should be less than 30s
+	// timerEnd
 	if(blockSize < 1)
 		throw "blockSize must be greater than zero!";
 	list[loc] files = getFiles(dirPath, fileExt);
 	map[str, list[tuple[loc, int, int]]] blocks = ();
 	map[str, list[tuple[loc a, int b, int c]]] duplicates = ();
+	map[loc, list[str]] filesWithDups = ();
 	
 	for(filePath <- files) {
 		list[str] code = CleanCode(filePath);
@@ -45,6 +48,7 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 		int codeSize = size(code); // TEST ME ???
 		int lastI = 0;
 		bool isBreak = false;
+		bool dupsExists = false;
 	
 		for(line <- code) {
 			// create blocks for each line
@@ -78,16 +82,20 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 				
 				tempList += <filePath, lineIndex, lineIndex+lastI-1>;
 				duplicates += (tempBlock: tempList);
+				dupsExists = true;
 			}
 			tempBlock = "";
 			tempList = [];
 			lineIndex += 1;
 		}
+		filesWithDups += (filePath : code);
+		dupsExists = false;
 	}
-	
-	println(now()-timer);
-	println("=====\n\rcreate pairs");
-	timer = now();
+	// timer
+		println(now()-timer);
+		println("=====\n\rcreate pairs");
+		timer = now();
+	// timerEnd
 	
 	// create all location pairs possibilities of duplicate for comparison
 	// 1,2,3 = 1:2 , 1:3 , 2:3
@@ -105,11 +113,9 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 		//println(dupValues);
 		dupsPairs = listPairs(dupValues);
 		for(pair <- dupsPairs) {
-			tempCodeA = CleanCode(pair.A.a1);
-			if(pair.A.a1 == pair.B.b1) // save some time if it is the same file
-				tempCodeB = tempCodeA;
-			else
-				tempCodeB = CleanCode(pair.B.b1);
+			tempCodeA = filesWithDups[pair.A.a1];
+			tempCodeB = filesWithDups[pair.B.b1];
+			
 			if(tempCodeA[pair.A.a3] != tempCodeB[pair.B.b3]) // just verification control / debugging. must be equal.
 				throw "Error occured!";
 
@@ -215,7 +221,7 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 	}
 	
 	println(now()-timer);
-	println("done");
+	println("===\n\rdone. Total time: <now()-totaltime>");
 	
 	//return duplicates;
 	return aggDups;
