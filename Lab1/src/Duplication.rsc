@@ -8,6 +8,7 @@ import IO;
 import Map;
 import Set;
 import Exception;
+import DateTime;
 
 public int DuplicateLinesCounter(map[str, list[tuple[loc a, int b, int c]]] duplicates) {
 	int counter = 0;
@@ -25,6 +26,10 @@ public int DuplicateLinesCounter(map[str, list[tuple[loc a, int b, int c]]] dupl
 }
 
 public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str fileExt, int blockSize) {
+
+	timer = now();
+	println("=====\n\rfind duplicates area");
+	
 	if(blockSize < 1)
 		throw "blockSize must be greater than zero!";
 	list[loc] files = getFiles(dirPath, fileExt);
@@ -80,6 +85,9 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 		}
 	}
 	
+	println(now()-timer);
+	println("=====\n\rcreate pairs");
+	timer = now();
 	
 	// create all location pairs possibilities of duplicate for comparison
 	// 1,2,3 = 1:2 , 1:3 , 2:3
@@ -145,47 +153,70 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 		}
 	}
 	
+	println(now()-timer);
+	println("=====\n\rremove overlaps");
+	timer = now();
 			
 	// remove overlapping lines boundaries
-	//map[str, list[tuple[loc a, int b, int c]]] aggCleanDups = aggDups;
-	map[str, map[loc, list[tuple[str lineCode, int fromLine, int toLine]]]] tempMap = ();
+	// conLocs      [(<<12,19>> : code), (<<14,19>> : code), (<<26,30>> : code)]
+	map[str, map[list[int], str]] tempMap = ();
 	str locsKey = "";
-	map[loc, list[tuple[str lineCode, int fromLine, int toLine]]] posMap = ();
-	list[tuple[str lineCode, int fromLine, int toLine]] posList = [];
 	for(aggDupKey <- aggDups) {
-		aggDupVal = aggDups[aggDupKey];
+		aggDupVal = aggDups[aggDupKey]; // code line
+		mapOfLinesCode = ();
+		tuple[loc a, int b, int c] lastVal;
 		for(posVal <- aggDupVal) {
-			locsKey += locToStr(posVal.a);
-			posList = [<aggDupKey, posVal.b, posVal.c>];
-			posMap += (posVal.a : posList);
+			locsKey += locToStr(posVal.a); // grouped paths
+			lastVal = posVal;
 		}
-		//check if line boundaries overlapping
 		if(locsKey in tempMap) {
-			for(posVal2 <- aggDupVal) {
-				curFileLoc = posVal2.a;
-				curFromLine = posVal2.b;
-				curToLine = posVal2.b;
-				tempparam = tempMap[locsKey];
-				//println(posVal2);
-				for(boundary <- tempparam[curFileLoc]) {
-					if(!inBetween(curFromLine, boundary.fromLine, boundary.toLine, true) && 
-						!inBetween(curToLine, boundary.fromLine, boundary.toLine, true)) {
-						aggDups = delete(aggDups, boundary.lineCode);
-						
-						//println("removed!");
-					}
-					//println(boundary);
-				}
+			mapOfLinesCode = tempMap[locsKey]; // get current list
+			mapOfLinesCode += ([lastVal.b..lastVal.c+1] : aggDupKey);
+			tempMap = delete(tempMap, locsKey);
+			tempMap += (locsKey : mapOfLinesCode);
+		}
+		else {
+			mapOfLinesCode += ([lastVal.b..lastVal.c+1] : aggDupKey);
+			tempMap += (locsKey : mapOfLinesCode);
+		}
+		locsKey = "";
+	}
+	
+	//println(tempMap);
+	list[list[int]] toDelete = [];
+	list[int] l = [];
+	for(groupKey <- tempMap) {
+		groupVal = tempMap[groupKey]; // key=lines val=codeline
+		// check who is the superset. and make list of subsets to remove
+		for(linesList <- groupVal) {
+			if(linesList >= l) {
+				toDelete += [l];
+				l = linesList;
+				//println("true: <linesList> \>= <l>");
+			}
+			else {
+				//println("false: <linesList> \>= <l>");
+				toDelete += [linesList];
 			}
 		}
-		else
-			tempMap += (locsKey : posMap);
-		locsKey = "";
-		posMap = ();
-	}
-	//println(tempMap);
+		// remove all listed subsets
+		for(delKey <- toDelete) {
+			if(isEmpty(delKey))
+				continue;
+			codeLineToDel = groupVal[delKey];
+			//println(codeLineToDel);
+			aggDups = delete(aggDups, codeLineToDel);
+		}
 		
-
+		//println("toDel: <toDelete>");
+		//println("---");
+		toDelete = [];
+		l = [];
+	}
+	
+	println(now()-timer);
+	println("done");
+	
 	//return duplicates;
 	return aggDups;
 }
