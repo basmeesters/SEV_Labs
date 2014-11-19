@@ -37,7 +37,7 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 		list[tuple[loc, int, int]] tempList = [];
 		
 		int lineIndex = 0;
-		int codeSize = size(code);
+		int codeSize = size(code); // TEST ME ???
 		int lastI = 0;
 		bool isBreak = false;
 	
@@ -61,10 +61,17 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 			if(tempBlock notin blocks)
 				blocks += (tempBlock: [<filePath, lineIndex, lineIndex+lastI-1>]);
 			else { // if is duplicate, add his location / update key				
-				tempList = blocks[tempBlock];
-				tempList += <filePath, lineIndex, lineIndex+lastI-1>;
-				if(tempBlock in duplicates)
+
+				if(tempBlock in duplicates) {
+					prevs = duplicates[tempBlock];
+					for(prev <- prevs)
+						tempList += prev;
 					duplicates = delete(duplicates, tempBlock);
+				}
+				else 
+					tempList = blocks[tempBlock];
+				
+				tempList += <filePath, lineIndex, lineIndex+lastI-1>;
 				duplicates += (tempBlock: tempList);
 			}
 			tempBlock = "";
@@ -103,7 +110,8 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 			while(true) {  // lets check if also next lines are equal (out of block size)
 				nextlineA = pair.A.a3+lineSucc;
 				nextlineB = pair.B.b3+lineSucc;
-				if(size(tempCodeA) < nextlineA || size(tempCodeB) < nextlineB) // if no more code lines
+				//println("<size(tempCodeA)> \< <nextlineA>");
+				if(size(tempCodeA)-1 < nextlineA || size(tempCodeB)-1 < nextlineB) // if no more code lines
 					break;
 				tempLineA = tempCodeA[nextlineA]; // last line of duplicated code identified + 1
 				tempLineB = tempCodeB[nextlineB];
@@ -126,49 +134,68 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 			// insert to aggregated duplicates map
 			tempList += <pair.A.a1, pair.A.a2, nextlineA-1>;
 			tempList += <pair.B.b1, pair.B.b2, nextlineB-1>;
+			tempList = dup(tempList);
 			aggDups += (tempBlock : tempList);
 			
-			println("<pair.A.a2> - <pair.A.a3+lineSucc> : <pair.B.b2> - <pair.B.b3+lineSucc>");
+			//println("<pair.A.a2> - <pair.A.a3+lineSucc> : <pair.B.b2> - <pair.B.b3+lineSucc>");
+			
 			// reset params
 			tempList = [];
 			tempBlock = "";
 		}
-		
-		//println(dupsPairs);
 	}
-		
-/*			
-	// Bas's bug report
-	// if duplication lines is more than blockSize	
-	// test duplicated block expandability
-	// it is known that next block on the list is also the same line
-	map[str, list[tuple[loc a, int b, int c]]] aggDups = ();
-	bool isLineMatch = true;
-	list[str] tempCode = [];
-	str tempBlock = "";
-	// blocksLocKey = invert(blocks); // use filePath/lines as key
-	for(dupKey <- duplicates) {
-		dupValues = duplicates[dupKey];
-		for(dupVal <- dupValues){
-			dupFilePath = dupVal.a;
-			dupFromLine = dupVal.b;
-			dupToLine = dupVal.c;
-			tempCode = CleanCode(t_filePath); // get code
-			tempBlock += dupVal;
-			while(isLineMatch) {
-				tempBlock += tempCode[dupToLine+1];
-			}
+	
 			
+	// remove overlapping lines boundaries
+	//map[str, list[tuple[loc a, int b, int c]]] aggCleanDups = aggDups;
+	map[str, map[loc, list[tuple[str lineCode, int fromLine, int toLine]]]] tempMap = ();
+	str locsKey = "";
+	map[loc, list[tuple[str lineCode, int fromLine, int toLine]]] posMap = ();
+	list[tuple[str lineCode, int fromLine, int toLine]] posList = [];
+	for(aggDupKey <- aggDups) {
+		aggDupVal = aggDups[aggDupKey];
+		for(posVal <- aggDupVal) {
+			locsKey += locToStr(posVal.a);
+			posList = [<aggDupKey, posVal.b, posVal.c>];
+			posMap += (posVal.a : posList);
 		}
-		while(isLineMatch) {
-			;
+		//check if line boundaries overlapping
+		if(locsKey in tempMap) {
+			for(posVal2 <- aggDupVal) {
+				curFileLoc = posVal2.a;
+				curFromLine = posVal2.b;
+				curToLine = posVal2.b;
+				tempparam = tempMap[locsKey];
+				//println(posVal2);
+				for(boundary <- tempparam[curFileLoc]) {
+					if(!inBetween(curFromLine, boundary.fromLine, boundary.toLine, true) && 
+						!inBetween(curToLine, boundary.fromLine, boundary.toLine, true)) {
+						aggDups = delete(aggDups, boundary.lineCode);
+						
+						//println("removed!");
+					}
+					//println(boundary);
+				}
+			}
 		}
-		// duplicate can be repeated more than twice
-		// duplicates += (tempBlock: [<filePath, lineIndex, lineIndex+blockSize>]);
+		else
+			tempMap += (locsKey : posMap);
+		locsKey = "";
+		posMap = ();
 	}
-*/
+	//println(tempMap);
+		
+
 	//return duplicates;
 	return aggDups;
+}
+
+public bool inBetween(int n, int min, int max, bool inclusive) {
+	if(n < max && n > min)
+		return true;
+	if(inclusive && n <= max && n >= min)
+		return true;
+	return false;
 }
 
 public list[tuple[&T, &T]] listPairs(list[&T] tlist) {
@@ -184,86 +211,4 @@ public list[tuple[&T, &T]] listPairs(list[&T] tlist) {
 		}
 	}
 	return pairs;
-}
-
-
-/*
-* OLD FUNCTIONS - not relevant for the above
-*/
-
-//public map[str, map[tuple[int, int], str]] LocDuplicates(loc dirPath, int blockSize) {
-public map[tuple[loc, int, int], str] LocDuplicates(loc dirPath, int blockSize) {
-	list[loc] files = getFiles(dirPath, "java");
-	map[tuple[loc, int, int], str] blocks = ();
-	for(file <- files)
-		blocks += CreateBlocks(file, blockSize);
-	//println(blocks);
-	//return ();
-	return FindDuplicates(blocks);
-}
-
-public int LocDuplicatesCount(loc dirPath, int blockSize) {
-	list[loc] files = getFiles(dirPath, "java");
-	map[tuple[loc, int, int], str] blocks = ();
-	for(file <- files)
-		blocks += CreateBlocks(file, blockSize);
-	return CountDuplicates(blocks);
-}
-
-public map[tuple[loc, int, int], str] CreateBlocks(loc filePath, int blockSize) {
-	list[str] code = CleanCode(filePath);
-	map[tuple[loc, int, int], str] blocks = ();
-	str tempBlock = "";
-	int lineIndex = 0;
-	int codeSize = size(code);
-	bool isBreak = false;
-
-	for(line <- code) {
-		// create blocks
-		for(i <- [0..blockSize]) {
-			if(i+lineIndex < codeSize)
-				tempBlock += code[i+lineIndex];
-			else { // if max line is reached. we can stop (otherwise it will create block with smaller than defined size
-				isBreak = true;
-				break;
-			}
-		}
-		if(isBreak == true) {
-			isBreak = false;
-			break;
-		}
-		blocks += (<filePath, lineIndex, lineIndex+blockSize> : tempBlock);
-		tempBlock = "";
-		lineIndex += 1;
-	}
-	return blocks;
-}
-
-public int CountDuplicates(map[tuple[loc, int, int], str] blocks) {
-	list[str] blocksList = [blocks[v] | v <- blocks];
-	int sizeOrg = size(blocksList);
-	int sizeFiltered = size(dup(blocksList));
-	return (sizeOrg-sizeFiltered);
-}
-
-public map[tuple[loc, int, int], str] FindDuplicates(map[tuple[loc, int, int], str] blocks) {
-	map[tuple[loc, int, int], str] duplicates = ();
-	int blockIndex = 0;
-	
-	for(k <- blocks) {
-		v = blocks[k];
-		blocks = delete(blocks, k);
-		//println("k: <k>");
-		for(kStack <- blocks) { 
-			vStack = blocks[kStack];
-			if(vStack == v) {
-				duplicates += (k:v);
-				duplicates += (kStack:vStack);
-				//println("kStack: <kStack>");
-				//blocks = delete(blocks, kStack);
-			}
-		}
-		blockIndex += 1;
-	}
-	return duplicates;
 }
