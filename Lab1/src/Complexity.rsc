@@ -1,6 +1,5 @@
 module Complexity
 
-import analysis::graphs::Graph;
 import lang::java::m3::Core;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
@@ -15,23 +14,25 @@ public map[loc, int] Complexity(loc project)
 
 public map[loc, int] Complexity(set[Declaration] dcs)
 {
-	
+	// Each method (or constructor) is a unit of which we want to know the complexity
 	map[loc, int] dict = ();
-	//println(dcs);
 	for (d <- dcs)
 	{
 		visit (d) {
-			case a:\constructor(_,_,_,Statement s)	: dict += (a@src : complexityMethod(s)); 
-			case a:\method(_,_,_,_,Statement s) 	: dict += (a@src : complexityMethod(s)); 
-			case a:\method(_,_,_,_)					: dict += (a@src : 1); 
+			case a:\constructor(_,_,_,Statement s)	: dict += (a@src : ComplexityInMethod(s)); 
+			case a:\method(_,_,_,_,Statement s) 	: dict += (a@src : ComplexityInMethod(s)); 
+			case a:\method(_,_,_,_)					: dict += (a@src : 1); // Just exceptions
 		}
 	}
 	return dict;
 }
 
-public int complexityMethod(Statement s)
+int ComplexityInMethod(Statement s)
 {
+	// Base complexity = 1
 	int count = 1;
+	
+	// For each of the following in the Statment (method) add one for complexity
 	visit(s)
 	{
 		case \for(_,_,_) 		: count += 1; 

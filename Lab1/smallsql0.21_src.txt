@@ -1,0 +1,19 @@
+Measure project at: $2014-11-16T18:27:18.646+00:00$
+
+The total LOC amount is: 21274, which gives score ++
+
+Very high risk percentage is: 8.470433393000
+Moderate risk percentage is: 25.8296512162800
+High risk percentage is: 12.202688727700
+No risk percentage is: 51.02472501685000
+The score for unit size is: --
+Very high risk risk percentage is: 5.283444580200
+Moderate risk risk percentage is: 9.1097113845100
+High risk risk percentage is: 12.056970950300
+No risk risk percentage is: 71.07737143882000
+The score for complexity per unit is: --
+
+score for analysability is: ++ & -- = 0
+score for changeability is: -- = --
+score for testability is: -- & -- = --
+-----------------------------------------------------
