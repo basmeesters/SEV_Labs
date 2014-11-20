@@ -39,7 +39,6 @@ public void Extract(loc project, bool log, set[Declaration] dcls)
 	map[str, list[tuple[loc, int, int]]] duplicates = DuplicatesAnalyzer(5, codeUnits);
 	int duplicationCounter = DuplicateLinesCounter(duplicates);
 	
-	
 	//Lines of code total
 	int totalVolume = LinesOfCode(codeUnits);
 	
@@ -84,11 +83,12 @@ public void Results(int total, map[str, real] volumeRisk, map[str, real] complex
 	
 	log("The percentage of duplication is: <average>\n");
 	log("The score of duplication is: <duplication>\n\n");
-	str analysability = CountScores([volume, unitvolume]);
-	str changability = CountScores([complexity]);
+	str analysability = CountScores([volume, duplication, unitvolume]);
+	str changability = CountScores([complexity, duplication]);
 	str testability = CountScores([complexity, unitvolume]);
-	log("score for analysability is: volume(<volume>) & unit volume(<unitvolume>) = <analysability>\n"); // unit testing & duplication
-	log("score for changeability is: complexity(<complexity>) = <changability>\n"); // duplication
+	log("score for analysability is: volume(<volume>) & unit volume(<unitvolume>) &" +
+	     " duplication(<duplication>)= <analysability>\n"); // unit testing & duplication
+	log("score for changeability is: complexity(<complexity>) & duplication(<duplication>)= <changability>\n"); // duplication
 	log("score for testability is: complexity(<complexity>) & unit volume(<unitvolume>) = <testability>\n"); // unit testing
 	log("score for maintainability is: analysability (<analysability>)" 
 	     + " & changability(<changability>) & testability(<testability>) = "
