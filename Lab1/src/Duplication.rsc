@@ -40,14 +40,14 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(int blockSize, ma
 	// timer
 		totaltime = now();
 		timer = now();
-		println("=====\n\rfind duplicates area"); // should be less than 30s
+		println("=====\n\rfind duplicates area");
 	// timerEnd
 	if(blockSize < 1)
 		throw "blockSize must be greater than zero!";
 	//list[loc] files = getFiles(dirPath, fileExt);
 	map[str, list[tuple[loc, int, int]]] blocks = ();
 	map[str, list[tuple[loc a, int b, int c]]] duplicates = ();
-	map[loc, list[str]] filesWithDups = ();
+	//map[loc, list[str]] filesWithDups = ();
 	
 	for(filePath <- codeUnits) {
 	
@@ -60,7 +60,7 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(int blockSize, ma
 		int lastI = 0;
 		bool isBreak = false;
 		bool dupsExists = false;
-		filesWithDups += (filePath : code);
+		//filesWithDups += (filePath : code);
 		
 		for(line <- code) {
 			// create blocks for each line
@@ -92,7 +92,7 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(int blockSize, ma
 				for(prevPos <- prevsPos) {
 					tempList = [];
 					//println(prevPos);
-					tuple[str code, list[tuple[loc, int, int]] posList] expandDups = expandDupBlocksSmall(<tempBlock , <currPos, prevPos>>, filesWithDups);
+					tuple[str code, list[tuple[loc, int, int]] posList] expandDups = expandDupBlocksSmall(<tempBlock , <currPos, prevPos>>, codeUnits);
 					tempList += expandDups.posList;
 					if(expandDups.code in duplicates) {
 						//println(tempList);
