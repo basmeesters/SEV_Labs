@@ -25,7 +25,17 @@ public int DuplicateLinesCounter(map[str, list[tuple[loc a, int b, int c]]] dupl
 	return counter;
 }
 
-public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str fileExt, int blockSize) {
+//public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str fileExt, int blockSize) {
+//	list[loc] files = getFiles(dirPath, fileExt);
+//	map[loc, list[str]] filesCode = ();
+//	for(filePath <- files) {
+//		filesCode = (filePath : CleanCode(filePath));
+//	}
+//	
+//	return DuplicatesAnalyzer(filesCode, blockSize);
+//}
+
+public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(int blockSize, map[loc, list[str]] codeUnits) {
 
 	// timer
 		totaltime = now();
@@ -34,13 +44,14 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 	// timerEnd
 	if(blockSize < 1)
 		throw "blockSize must be greater than zero!";
-	list[loc] files = getFiles(dirPath, fileExt);
+	//list[loc] files = getFiles(dirPath, fileExt);
 	map[str, list[tuple[loc, int, int]]] blocks = ();
 	map[str, list[tuple[loc a, int b, int c]]] duplicates = ();
 	map[loc, list[str]] filesWithDups = ();
 	
-	for(filePath <- files) {
-		list[str] code = CleanCode(filePath);
+	for(filePath <- codeUnits) {
+	
+		list[str] code = codeUnits[filePath];
 		str tempBlock = "";
 		list[tuple[loc, int, int]] tempList = [];
 		
@@ -49,7 +60,8 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 		int lastI = 0;
 		bool isBreak = false;
 		bool dupsExists = false;
-	
+		filesWithDups += (filePath : code);
+		
 		for(line <- code) {
 			// create blocks for each line
 			lastI = 0;
@@ -66,7 +78,6 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 				isBreak = false;
 				break;
 			}
-			filesWithDups += (filePath : code);
 			if(tempBlock notin blocks) {
 				blocks += (tempBlock: [<filePath, lineIndex, lineIndex+lastI>]);
 				//println((tempBlock: <filePath, lineIndex, lineIndex+lastI>));
@@ -109,20 +120,6 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 		//println("====");
 	}
 	
-	//return ();
-	//return duplicates;
-	//return expandDupBlocks(duplicates, filesWithDups);
-	
-	//// timer
-	//	println(now()-timer);
-	//	println("=====\n\rexpanding dup blocks");
-	//	timer = now();
-	//// timerEnd
-
-	//map[str, list[tuple[loc a, int b, int c]]] aggDups = expandDupBlocks(duplicates, filesWithDups);
-	
-	map[str, list[tuple[loc a, int b, int c]]] aggDups = duplicates;
-	
 	println(now()-timer);
 	println("=====\n\rremove overlaps");
 	timer = now();
@@ -131,8 +128,8 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 	// conLocs      [(<<12,19>> : code), (<<14,19>> : code), (<<26,30>> : code)]
 	map[str, map[list[int], str]] tempMap = ();
 	str locsKey = "";
-	for(aggDupKey <- aggDups) {
-		aggDupVal = aggDups[aggDupKey]; // code line
+	for(aggDupKey <- duplicates) {
+		aggDupVal = duplicates[aggDupKey]; // code line
 		mapOfLinesCode = ();
 		tuple[loc a, int b, int c] lastVal;
 		for(posVal <- aggDupVal) {
@@ -175,7 +172,7 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 				continue;
 			codeLineToDel = groupVal[delKey];
 			//println(codeLineToDel);
-			aggDups = delete(aggDups, codeLineToDel);
+			duplicates = delete(duplicates, codeLineToDel);
 		}
 		
 		//println("toDel: <toDelete>");
@@ -188,7 +185,7 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(loc dirPath, str 
 	println("===\n\rdone. Total time: <now()-totaltime>");
 	
 	//return duplicates;
-	return aggDups;
+	return duplicates;
 }
 
 public tuple[str, list[tuple[loc, int, int]]] expandDupBlocksSmall(tuple[str Code, tuple[tuple[loc fileLoc, int fromLine, int toLine] A, tuple[loc fileLoc, int fromLine, int toLine] B] Pos] duplicates, map[loc, list[str]] filesWithDups) {
@@ -233,71 +230,6 @@ public tuple[str, list[tuple[loc, int, int]]] expandDupBlocksSmall(tuple[str Cod
 	expandedDups = <tempBlock , tempList>;
 
 	return expandedDups;
-}
-
-public map[str, list[tuple[loc, int, int]]] expandDupBlocks(map[str, list[tuple[loc a, int b, int c]]] duplicates, map[loc, list[str]] filesWithDups) {
-	// create all location pairs possibilities of duplicate for comparison
-	// 1,2,3 = 1:2 , 1:3 , 2:3
-	list[tuple[tuple[loc a1, int a2, int a3] A, tuple[loc b1, int b2, int b3] B]] dupsPairs = [];
-	map[str, list[tuple[loc a, int b, int c]]] aggDups = ();
-	list[str] tempCodeA = [];
-	list[str] tempCodeB = [];
-	str tempLineA = "";
-	str tempLineB = "";
-	int nextlineA = 0;
-	int nextlineB = 0;
-	int lineSucc = 1;
-	for(dupKey <- duplicates) {
-		dupValues = duplicates[dupKey]; // single duplicate
-		//println(dupValues);
-		dupsPairs = listPairs(dupValues);
-		for(pair <- dupsPairs) {
-			tempCodeA = filesWithDups[pair.A.a1];
-			tempCodeB = filesWithDups[pair.B.b1];
-			
-			if(tempCodeA[pair.A.a3] != tempCodeB[pair.B.b3]) // just verification control / debugging. must be equal.
-				throw "Error occured!";
-
-			tempBlock = dupKey;
-			lineSucc = 1;
-			while(true) {  // lets check if also next lines are equal (out of block size)
-				nextlineA = pair.A.a3+lineSucc;
-				nextlineB = pair.B.b3+lineSucc;
-				//println("<size(tempCodeA)> \< <nextlineA>");
-				if(size(tempCodeA)-1 < nextlineA || size(tempCodeB)-1 < nextlineB) // if no more code lines
-					break;
-				tempLineA = tempCodeA[nextlineA]; // last line of duplicated code identified + 1
-				tempLineB = tempCodeB[nextlineB];
-				//println("<pair.A.a3> : <tempLineA> ?= <pair.B.b3> : <tempLineB>");
-				if(tempLineA != tempLineB)
-					break;
-					
-				tempBlock += tempLineA;	// A & B are the same. doesn't matter who we add
-				
-				// println("<pair.A.a2> - <pair.A.a3+lineSucc> : <pair.B.b2> - <pair.B.b3+lineSucc>");
-				lineSucc += 1;
-			}
-			
-			tempList = [];
-			if(tempBlock in aggDups) {
-				// get previous aggregated duplicates from map
-				tempList = aggDups[tempBlock];
-				aggDups = delete(aggDups, tempBlock);
-			}
-			// insert to aggregated duplicates map
-			tempList += <pair.A.a1, pair.A.a2, nextlineA-1>;
-			tempList += <pair.B.b1, pair.B.b2, nextlineB-1>;
-			tempList = dup(tempList);
-			aggDups += (tempBlock : tempList);
-			
-			//println("<pair.A.a2> - <pair.A.a3+lineSucc> : <pair.B.b2> - <pair.B.b3+lineSucc>");
-			
-			// reset params
-			tempList = [];
-			tempBlock = "";
-		}
-	}
-	return aggDups;
 }
 
 public bool inBetween(int n, int min, int max, bool inclusive) {
