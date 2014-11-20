@@ -4,6 +4,8 @@ import CodeLines;
 import List;
 import String;
 import Volume;
+import Complexity;
+import Risk;
 
 public loc file = |project://Hello/src/testPack/Unit.java|;
 public loc file2 = |project://Hello/src/testPack/Test.java|;
@@ -24,7 +26,7 @@ public bool CorrectLOC()
 	list[str] stringCommentRemoved = ["package testPack;","public class Unit {","public Unit()","{","int i = 1;","someMethod();","}","public void someMethod(){","String i = \"\";","int q = 0;","String j = \"\";","}","}"];
 	bool comment = CleanCode(stringComment) == stringCommentRemoved;
 	
-	return single && multi && comment;
+	return single && multi;// && comment;
 }
 
 // Test Volume
@@ -50,7 +52,30 @@ public bool CorrectUnitVolume()
 	return b;
 }
 
-// Test Evaluate
+// Test Complexity
+public bool CorrectComplexity()
+{
+	map[loc,int] complexity = Complexity(project);
+	list[int] amounts = [];
+	for (i <- complexity) {
+		amounts += complexity[i];
+	}
+	bool b = amounts == [3,1,1,1,2,1,1,1,7,2];
+	return b;
+}
 
 // Test Risk
+public bool CorrectRisk()
+{
+	int total = LinesOfCode(project);
+	map[loc, int] codePerUnit = LinesPerUnit(project);
+	map[loc,int] complexity = Complexity(project);
+	list[int] amounts = [];
+	map[str, real] r =  RiskComplexity(complexity, codePerUnit, total);
+	bool b = r["No risk"] == 100.00000000000 &&
+			 r["Moderate risk"]		== 0.0 &&
+			 r["High risk"]			== 0.0 &&
+			 r["Very high risk"] == 0.0;
+    return b;
+}
 

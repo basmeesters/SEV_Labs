@@ -4,6 +4,8 @@ import util::Math;
 import lang::java::m3::Core;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
+import Complexity;
+import Volume;
 import IO;
 
 // Standard lists of how to divide amounts in categories for volume and complexity
@@ -12,6 +14,14 @@ public list[int] ComplexityMetrics = [10, 20, 50];
 
 public map[str, real] RiskVolume(map[loc, int] units, int total) {
 	return RiskPercentage(RiskTable(units, VolumeUnitsMetrics), units, total);
+}
+
+public map[str, real] RiskComplexity(loc project)
+{
+	c = Complexity(project);
+	u = LinesPerUnit(project);
+	t = LinesOfCode(project);
+	return RiskComplexity(c,u,t);
 }
 
 public map[str, real] RiskComplexity(map[loc, int] complexity, map[loc, int] units, int total) {

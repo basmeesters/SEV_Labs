@@ -43,8 +43,7 @@ int ComplexityInMethod(Statement s)
 		case \if(_,_) 			: count += 1;
 		case \if(_,_,_) 		: count += 1;
 		case \case(_) 			: count += 1;
-		case \try(_,_)			: count += 1;
-		case \try(_,_,_)	    : count += 1;
+		case \catch(_,_)		: count += 1;
 		case \conditional(_,_,_): count += 1;
 		case \infix(_,"&&",_) 	: count += 1;
 		case \infix(_,"||",_) 	: count += 1;
