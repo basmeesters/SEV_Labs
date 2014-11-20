@@ -37,11 +37,11 @@ public int DuplicateLinesCounter(map[str, list[tuple[loc a, int b, int c]]] dupl
 
 public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(int blockSize, map[loc, list[str]] codeUnits) {
 
-	// timer
-		totaltime = now();
-		timer = now();
-		println("=====\n\rfind duplicates area");
-	// timerEnd
+	//// timer
+	//	totaltime = now();
+	//	timer = now();
+	//	println("=====\n\rfind duplicates area");
+	//// timerEnd
 	if(blockSize < 1)
 		throw "blockSize must be greater than zero!";
 	//list[loc] files = getFiles(dirPath, fileExt);
@@ -120,9 +120,9 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(int blockSize, ma
 		//println("====");
 	}
 	
-	println(now()-timer);
-	println("=====\n\rremove overlaps");
-	timer = now();
+	//println(now()-timer);
+	//println("=====\n\rremove overlaps");
+	//timer = now();
 			
 	// remove overlapping lines boundaries
 	// conLocs      [(<<12,19>> : code), (<<14,19>> : code), (<<26,30>> : code)]
@@ -181,8 +181,8 @@ public map[str, list[tuple[loc, int, int]]] DuplicatesAnalyzer(int blockSize, ma
 		l = [];
 	}
 	
-	println(now()-timer);
-	println("===\n\rdone. Total time: <now()-totaltime>");
+	//println(now()-timer);
+	//println("===\n\rdone. Total time: <now()-totaltime>");
 	
 	//return duplicates;
 	return duplicates;
