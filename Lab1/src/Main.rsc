@@ -18,10 +18,18 @@ import DateTime;
 // Projects
 public loc simple = |project://Hello|;
 public loc small = |project://smallsql0.21_src|;
+public loc big = |project://hsqldb-2.3.1|;
 	
 // Extract method
 public void Extract(loc project, bool log)
 {
+	Extract(project, log, createAstsFromEclipseProject(project,true));
+}
+
+public void Extract(loc project, bool log, set[Declaration] dcls)
+{
+	time = now();
+
 	// All useful lines of code (no comments or blank lines)
 	map[loc, list[str]] codeUnits = CodePerFile(project);
 	
@@ -33,16 +41,15 @@ public void Extract(loc project, bool log)
 	map[str, real] riskLevelVolume = RiskVolume(volume, totalVolume);
 
 	// Cyclomatic complexity per unit
-	set[Declaration] dcls = createAstsFromEclipseProject(project,true);
 	map[loc, int] complexity = Complexity(dcls);
 	map[str, real] riskLevelComplexity = RiskComplexity(complexity, volume, totalVolume);
 	
 	if (log) {
-		str p = replaceAll(locToStr(project), "|", "");
-		loc file = |project://Lab1/Log<p>.txt|;
-		appendToFile(file, "Measure project at: <now()>\n\n");
+		str p = replaceAll(replaceAll(locToStr(project), "|", ""), "/", "_");
+		loc file = |project://Lab1/<p>.txt|;
+		appendToFile(file, "Measure project at: <time>\n\n");
 		Results(totalVolume, riskLevelVolume, riskLevelComplexity, void (str string){appendToFile(file, string);});
-		appendToFile(file, "-----------------------------------------------------");
+		appendToFile(file, "<createDuration(time, now())>\n-----------------------------------------------------\n\n");
 	}
 	else 
 		Results(totalVolume, riskLevelVolume, riskLevelComplexity, print);
@@ -70,14 +77,17 @@ public void Results(int total, map[str, real] volumeRisk, map[str, real] complex
 		log("<i> risk percentage is: <complexityRisk[i]>\n");
 	}
 	str complexity = EvaluateTable(complexityRisk);
-	log("The score for complexity per unit is: <complexity>\n\n");
+	log("\nThe score for complexity per unit is: <complexity>\n\n");
 	
-	log("score for analysability is: <volume> & <unitvolume> = <CountScores([volume, unitvolume])>\n"); // unit testing & duplication
-	log("score for changeability is: <complexity> = <CountScores([complexity])>\n"); // duplication
-	log("score for testability is: <complexity> & <unitvolume> = <CountScores([complexity, unitvolume])>\n"); // unit testing
-	//println("score for maintainability is: <volume> + <unitvolume> = <CountScores([volume, unitvolume])>");
-	
-	// Stability = unit testing
+	str analysability = CountScores([volume, unitvolume]);
+	str changability = CountScores([complexity]);
+	str testability = CountScores([complexity, unitvolume]);
+	log("score for analysability is: volume(<volume>) & unit volume(<unitvolume>) = <analysability>\n"); // unit testing & duplication
+	log("score for changeability is: complexity(<complexity>) = <changability>\n"); // duplication
+	log("score for testability is: complexity(<complexity>) & unit volume(<unitvolume>) = <testability>\n"); // unit testing
+	log("score for maintainability is: analysability (<analysability>)" 
+	     + " & changability(<changability>) & testability(<testability>) = "
+	     + "<CountScores([analysability,changability,testability ])>\n");
 }	
 
 // Create a new score given a list of scores, each weights the same
@@ -93,7 +103,7 @@ public str CountScores(list[str] scores)
 		case "--" : score -= 2;
 	}
 	newScore = score / size(scores);
-	if (newScore < -2)
+	if (newScore <= -2)
 		result = "--";
 	else if (newScore == -1)
 		result = "-";

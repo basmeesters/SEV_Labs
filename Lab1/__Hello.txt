@@ -1,0 +1,50 @@
+Measure project at: $2014-11-19T13:31:19.085+00:00$
+
+The total LOC amount is: 91, which gives score ++
+
+Very high risk percentage is: 0.0
+Moderate risk percentage is: 0.0
+High risk percentage is: 0.0
+No risk percentage is: 100.00000000000
+
+The score for unit size is: ++
+
+Very high risk risk percentage is: 0.0
+Moderate risk risk percentage is: 0.0
+High risk risk percentage is: 0.0
+No risk risk percentage is: 100.00000000000
+
+The score for complexity per unit is: ++
+
+score for analysability is: volume(++) & unit volume(++) = ++
+score for changeability is: complexity(++) = ++
+score for testability is: complexity(++) & unit volume(++) = ++
+score for maintainability is: analysability (++) & changability(++) & testability(++) = ++
+duration(0,0,0,0,0,0,422)
+-----------------------------------------------------
+
+Measure project at: $2014-11-19T13:54:58.206+00:00$
+
+The total LOC amount is: 75, which gives score ++
+
+Very high risk percentage is: 0.0
+Moderate risk percentage is: 0.0
+High risk percentage is: 0.0
+No risk percentage is: 100.00000000000
+
+The score for unit size is: ++
+
+Very high risk risk percentage is: 0.0
+Moderate risk risk percentage is: 0.0
+High risk risk percentage is: 0.0
+No risk risk percentage is: 100.00000000000
+
+The score for complexity per unit is: ++
+
+score for analysability is: volume(++) & unit volume(++) = ++
+score for changeability is: complexity(++) = ++
+score for testability is: complexity(++) & unit volume(++) = ++
+score for maintainability is: analysability (++) & changability(++) & testability(++) = ++
+duration(0,0,0,0,0,0,188)
+-----------------------------------------------------
+

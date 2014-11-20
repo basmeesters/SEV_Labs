@@ -35,14 +35,13 @@ public map[str, real] RiskPercentage(map[loc, int] riskTable, map[loc, int] unit
 			highRisk += percentage;
 		else if (riskTable[i] == 1)
 			risk += percentage;
-		else {
+		else 
 			noRisk += percentage; 
 		totalAmount += percentage;
-		}
 	}
-	println("total:<totalAmount>");
-	noRisk += (100.00 - totalAmount);
+	
 	// If the totalAmount is not 100% it is probably because of import and field lines which are in the noRisk category
+	noRisk += (100.00 - totalAmount);
 	return ("No risk":noRisk, "Moderate risk":risk, "High risk":highRisk, "Very high risk":veryHighRisk);
 }
 

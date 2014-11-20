@@ -15,7 +15,7 @@ public map[loc, list[str]] CodePerFile(loc project)
 	map[loc, list[str]] dictionary =();
 	list[loc] files = getFiles(project, "java");
 	for (f <- files) {
-		dictionary += (f: CleanCode2(f));
+		dictionary += (f: CleanCode(f));
 	}
 	return dictionary;
 }
@@ -60,14 +60,14 @@ public map[loc, int] LinesPerUnit(set[Declaration] dcs)
 				endLine = a@src.end.line;
 				
 				// Clean the code for the particular given range and count the lines afterwards
-				list[str] uv = CleanCode2(lines, startLine, endLine);
+				list[str] uv = CleanCode(lines, startLine, endLine);
 				dict += (a@src : size(uv)); 
 			}
 			case a:\method(_,_,_,_,Statement s) 	: 
 			{
 				startLine = a@src.begin.line;
 				endLine = a@src.end.line;
-				list[str] uv = CleanCode2(lines, startLine, endLine);
+				list[str] uv = CleanCode(lines, startLine, endLine);
 				dict += (a@src : size(uv)); 
 			}
 			case a:\method(_,_,_,_)					:  

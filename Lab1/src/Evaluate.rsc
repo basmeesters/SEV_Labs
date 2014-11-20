@@ -40,23 +40,6 @@ public str EvaluateList(int amount, list[int] borders) {
 	return evaluation;
 }
 
-// Evaluate a list based on a list of given borders, but in reverse order (needed for testing range)
-public str EvaluateListReverse(int amount, list[int] borders)
-{
-	str evaluation;
-	if (amount < borders[0])
-		evaluation = "--";
-	else if (amount < borders[1])
-		evaluation = "-";
-	else if (amount < borders[2])
-		evaluation = "0";
-	else if (amount < borders[3])
-		evaluation = "+";
-	else
-		evaluation = "++";
-	return evaluation;
-}
-
 // Evaluate a table
 public str EvaluateTable(map[str, real] table)
 {
