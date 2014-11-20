@@ -10,6 +10,15 @@ import Risk;
 public loc file = |project://Hello/src/testPack/Unit.java|;
 public loc file2 = |project://Hello/src/testPack/Test.java|;
 public loc project = |project://Hello|;
+// Automated
+public bool Test()
+{
+	return CorrectLOC && 
+	       CorrectVolume && 
+	       CorrectUnitVolume && 
+	       CorrectComplexity && 
+	       CorrectRisk;
+}
 
 // Test CodeLines
 public bool CorrectLOC()
@@ -78,4 +87,3 @@ public bool CorrectRisk()
 			 r["Very high risk"] == 0.0;
     return b;
 }
-

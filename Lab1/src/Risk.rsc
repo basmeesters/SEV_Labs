@@ -28,6 +28,7 @@ public map[str, real] RiskComplexity(map[loc, int] complexity, map[loc, int] uni
 	return RiskPercentage(RiskTable(complexity, ComplexityMetrics), units, total);
 }
 
+// Similar table for complexity and volume
 public map[str, real] RiskPercentage(map[loc, int] riskTable, map[loc, int] units, int total){
 	real veryHighRisk = 0.0;
 	real highRisk = 0.0;
@@ -55,6 +56,7 @@ public map[str, real] RiskPercentage(map[loc, int] riskTable, map[loc, int] unit
 	return ("No risk":noRisk, "Moderate risk":risk, "High risk":highRisk, "Very high risk":veryHighRisk);
 }
 
+// Use borders to create categories
 public map[loc, int] RiskTable(map[loc,int] units, list[int] borders)
 {
 	map[loc, int] risk = ();

@@ -12,7 +12,7 @@ list[int] bordersVolume = [66000, 246000, 665000, 1310000];
 list[int] bordersDuplication = [3, 5, 10, 20];
 list[int] bordersTesting = [20, 60, 80, 95];
 
-public str EvaluateDuplicates(int amount) {
+public str EvaluateDuplicates(int amount, int total) {
 	return EvaluateList(amount, bordersDuplication);
 }
 

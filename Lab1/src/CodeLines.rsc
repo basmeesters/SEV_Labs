@@ -39,19 +39,14 @@ public list[str] CleanCode(list[str] lines, int beginLine, int endLine)
 		line = trim(l);
 		visit(line)
 		{
-			case /.*\"<m: .*\/\*>\"/	:	
-			{
-				line = ""; 
-				noString = false;
-			}			
-			case /<m:\/\/.*>/ 		: 	line = replaceAll(line, m, "");  							// Single line
-			case /<m: \/\*.*>/  	: 	{line = replaceAll(line, m, ""); noComment = false;}
-			case /<m: .*\*\/>/ 		: 	{line = replaceAll(line, m, ""); noComment = true; }		// Multi line end	
-			case /<m:\t>/ 			: 	line = replaceAll(line, m, " ");							// Tab
+			case /.*\"<m: .*\/\*>\"/	:	line = replaceAll(line, m, ""); 		
+			case /<m:\/\/.*>/ 			: 	line = replaceAll(line, m, "");  							// Single line
+			case /<m: \/\*.*>/  		: 	{line = replaceAll(line, m, ""); noComment = false;}
+			case /<m: .*\*\/>/ 			: 	{line = replaceAll(line, m, ""); noComment = true; }		// Multi line end	
+			case /<m:\t>/ 				: 	line = replaceAll(line, m, " ");							// Tab
 		}
 		if (line != "" && line != "\n" && noComment && line != " ") {
 			code += line;
-			//println(line);
 		}
 	}
 	return code;

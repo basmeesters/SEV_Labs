@@ -14,6 +14,8 @@ import Duplication;
 import IO;
 import util::FileSystem;
 import DateTime;
+import util::Math;
+
 
 // Projects
 public loc simple = |project://Hello|;
@@ -33,6 +35,11 @@ public void Extract(loc project, bool log, set[Declaration] dcls)
 	// All useful lines of code (no comments or blank lines)
 	map[loc, list[str]] codeUnits = CodePerFile(project);
 	
+	// Duplicates
+	map[str, list[tuple[loc, int, int]]] duplicates = DuplicatesAnalyzer(5, codeUnits);
+	int duplicationCounter = DuplicateLinesCounter(duplicates);
+	
+	
 	//Lines of code total
 	int totalVolume = LinesOfCode(codeUnits);
 	
@@ -48,21 +55,14 @@ public void Extract(loc project, bool log, set[Declaration] dcls)
 		str p = replaceAll(replaceAll(locToStr(project), "|", ""), "/", "_");
 		loc file = |project://Lab1/<p>.txt|;
 		appendToFile(file, "Measure project at: <time>\n\n");
-		Results(totalVolume, riskLevelVolume, riskLevelComplexity, void (str string){appendToFile(file, string);});
+		Results(totalVolume, riskLevelVolume, riskLevelComplexity, duplicationCounter, void (str string){appendToFile(file, string);});
 		appendToFile(file, "<createDuration(time, now())>\n-----------------------------------------------------\n\n");
 	}
 	else 
-		Results(totalVolume, riskLevelVolume, riskLevelComplexity, print);
-	// duplications
-	//map[str, list[tuple[loc, int, int]]] duplications = DuplicatesAnalyzer(project, "java", 6);
-	//int totalDups = DuplicateLinesCounter(duplications);
-	
-	//str duplicationEvaluated = EvaluateDuplicates(totalDups, totalVolume);
-
-	//return [volumeEvaluated, complexityEvaluated, volumeUnitEvaluated];
+		Results(totalVolume, riskLevelVolume, riskLevelComplexity, duplicationCounter, print);
 }
 
-public void Results(int total, map[str, real] volumeRisk, map[str, real] complexityRisk, void (str) log)
+public void Results(int total, map[str, real] volumeRisk, map[str, real] complexityRisk, int duplicationCounter, void (str) log)
 {
 	str volume = EvaluateVolume(total);
 	log("The total LOC amount is: <total>, which gives score <volume>\n\n");
@@ -79,6 +79,11 @@ public void Results(int total, map[str, real] volumeRisk, map[str, real] complex
 	str complexity = EvaluateTable(complexityRisk);
 	log("\nThe score for complexity per unit is: <complexity>\n\n");
 	
+	real average = toReal(duplicationCounter) / toReal(total) * 100.0;
+	str duplication = EvaluateDuplicates(toInt(average), total);
+	
+	log("The percentage of duplication is: <average>\n");
+	log("The score of duplication is: <duplication>\n\n");
 	str analysability = CountScores([volume, unitvolume]);
 	str changability = CountScores([complexity]);
 	str testability = CountScores([complexity, unitvolume]);
