@@ -48,3 +48,31 @@ score for maintainability is: analysability (0) & changability(--) & testability
 duration(0,0,0,0,1,43,814)
 -----------------------------------------------------
 
+Measure project at: $2014-11-26T08:36:35.035+00:00$
+
+The total LOC amount is: 24015, which gives score ++
+
+Very high risk percentage is: 8.286487612700
+Moderate risk percentage is: 23.0189464918500
+High risk percentage is: 10.843222985600
+No risk percentage is: 57.85134290985000
+
+The score for unit size is: --
+
+Very high risk risk percentage is: 5.225900479300
+Moderate risk risk percentage is: 8.3031438686100
+High risk risk percentage is: 10.701644805500
+No risk risk percentage is: 75.76931084659000
+
+The score for complexity per unit is: --
+
+The percentage of duplication is: 9.298355195000
+The score of duplication is: 0
+
+score for analysability is: volume(++) & unit volume(--) & duplication(0)= 0
+score for changeability is: complexity(--) & duplication(0)= -
+score for testability is: complexity(--) & unit volume(--) = --
+score for maintainability is: analysability (0) & changability(-) & testability(--) = -
+duration(0,0,0,0,4,54,476)
+-----------------------------------------------------
+
