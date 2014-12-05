@@ -5,28 +5,21 @@ import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import IO;
 import Node;
+import List;
 
 // The project locations
 public loc simple = |project://Hello|;
 public loc small = |project://smallsql0.21_src|;
 
 // Just a shorter variant 
-public set[Declaration] AST(loc project)
-{
-	return createAstsFromEclipseProject(project,true);
-}
+public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,true);
 
 // One declaration for each file
-public set[Declaration] SerializedAST(loc project)
-{
-	return SerializedAST(AST(project));
-}
+public set[Declaration] SerializedAST(loc project) = SerializedAST(AST(project));
 
 // Serialize the AST by replacing variable and method names
-public set[Declaration] SerializedAST(set[Declaration] ast)
+public set[Declaration] SerializedAST(set[Declaration] ast) 
 {
-	// Guy, for you, this deep visit goes through the whole ast and everytime one of the below matches does the 
-	// operation after the =>
 	return visit (ast) 
 	{
 		case \simpleName(name) 					=> \simpleName("var") 
@@ -40,29 +33,6 @@ public set[Declaration] SerializedAST(set[Declaration] ast)
 	}
 }
 
-public list[value] TreeSize(set[Declaration] dcs)
-{
-	l = [];
-	visit(dcs) {
-		case a:\constructor(n, p, e, s)	:	
-		{
-			l += Check(a);	
-		}
-		case a:\method(r,n, p, e, s) 	:	
-		{
-			l += return Check(a);	
-		}
-		case a:\method(t,n, p, e)  		:	
-		{
-			;	
-		}
-    	
-	}
-	return l;
-}
-
-// Guy, for you again, this code is not useful but shows how you can also pattern match on terminals (instead of non terminals)
-// See the Java grammar for more information:
 // https://github.com/cwi-swat/rascal/blob/master/src/org/rascalmpl/library/lang/java/m3/AST.rsc
 public list[list[value]] Check(value d)
 {
@@ -71,90 +41,52 @@ public list[list[value]] Check(value d)
 	list [value] current = [];
 	list [value] total = [];
 	bottom-up visit(d) {
-		case b:Statement _	: 
-		{
-			size += 1;
-			if (size > 7)
-				return l;
-			else {
-				current += b;
-				total += Check(b);
-			}
-		}
-		case b:Expression _ :
-		{
-			size += 1;
-			if (size > 7)
-				return l;
-			else {
-				current += b;
-				total += Check(b);
-			}
-		}
-		case b:Type _ :
-		{
-			size += 1;
-			if (size > 7)
-				return l;
-			else {
-				current += b;
-				//total += Check(b);
-			}
-		}
-		case b:Declaration _:
-		{
-			size += 1;
-			if (size > 7)
-				return l;
-			else {
-				current += b;
-				total += Check(b);
-			}
-		}
-		case b:Modifier _:
-		{
-			size += 1;
-			if (size > 7)
-				return l;
-			else {
-				current += b;
-				total += Check(b);
-			}
-		}
+		case b:Statement _	: ;
+		case b:Expression _ : ;
+		case b:Type _ :;
+		case b:Declaration _:;
+		case b:Modifier _:;
 	}
 	total += current;
 	return total;
 }
 
+// Get all the subtrees given a node 
+private list[tuple[node,int]] Subtrees(node a, int t) = [<n,s> | /node n <- a, s <- [SizeTree(n)], s >= t];
+private int SizeTree(node n) = (0|it+1|/node _ <-n);
+
 // Get all subtrees within methods / constructors
-public void SubTrees(set[Declaration] ast)
+public map[tuple[node,int], int] MethodTrees(set[Declaration] ast, int t)
 {
-	l = [];
+	dict = ();
 	visit(ast) {
-		case a:\constructor(n, p, e, s)	:	
-		{
-			e = Elements(a);
-			println(e);			// the subtrees in the form of <node, children amount> 
-			println(size(e));	// the amount of subtrees
-		}
-		case a:\method(r,n, p, e, s) 	:	
-		{
-			list[tuple[node,int]] e = Elements(a);
-			println(e);	
-			println(size(e));
-		}
-		case a:\method(t,n, p, e)  		:	
-		{
-			e = Elements(a);
-			println(e);	
-			println(size(e));
-		}
+		case a:\constructor(n, p, e, s)	:	dict += hash(dict, Subtrees(a,t)) ;
+		case a:\method(r,n, p, e, s) 	:	dict += hash(dict, Subtrees(a,t)) ;
+		case a:\method(t,n, p, e)  		:	dict += hash(dict, Subtrees(a,t)) ;
 	}
-	
+	return dict;
 }
 
-// Get all the subtrees given a node 
-public list[tuple[node,int]] Elements(node a)
+private map[tuple[node,int], int] hash (map[tuple[node,int], int] dict, list[tuple[node,int]] trees)
 {
-	return trees = [<n,(0|it+1|/node _ <-n)> | /node n <- a];
+	newD = ();
+	for (tuple[node,int] l <- trees) {
+		if (l in dict) {
+			newD += (l : dict[l] + 1);
+			println("dup!");
+		}
+		else {
+			newD += (l : 1);
+			println("new!");
+		}
+	}
+	return newD;
+}
+
+public void printTrees(loc project, int t)
+{
+	ast = AST(project);
+	trees = MethodTrees(ast, t);
+	for(tuple[node a, int b] l <- trees)
+		println("size : <l.b>, amount = <trees[l]>, tree: <l.a>");
 }
