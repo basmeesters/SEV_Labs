@@ -8,6 +8,8 @@ import Node;
 import List;
 import Map;
 import util::Math;
+import AST::Group;
+import DateTime;
 
 // The project locations
 public loc simple = |project://Hello|;
@@ -20,16 +22,23 @@ public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,
 // Print the found duplicates
 public void PrintTrees(loc project, int t)
 {
+	time = now();
 	int sm =0;
 	ast = AST(project);
-	map[node,list[node]] trees = Subclones(filterClones(MethodTrees(ast, t)));
+	map[node,list[node]] trees = Subclones(FilterClones(MethodTrees(ast, t)));
 	int i =0;
 	for(node a <- trees) {
 		i += 1;
 		top-down-break visit(trees[a]) {
-			case Statement b 	: 	println("<i> : <b@src>");
+			case Statement b 	: 	
+			{
+				println("<i> : <b@src>");
+				sm += (b@src.end.line - b@src.begin.line + 1);
+			}
 		}
 	}
+	println(sm);
+	println(createDuration(time, now()));
 }
 
 // Get all the subtrees given a node 
@@ -41,99 +50,15 @@ private map[node,list[node]] MethodTrees(set[Declaration] ast, int t)
 {
 	map[node,list[node]] dict = ();
 	top-down visit(ast) {
-		case a:\constructor(n, p, e, s)	:	dict += hash(dict, GroupTrees(Subtrees(a,0), t)); // hash(dict, Subtrees(a,t)); 
-		case a:\method(r,n, p, e, s) 	:	dict += hash(dict, GroupTrees(Subtrees(a,0), t)); // hash(dict, Subtrees(a,t)); 
-		case a:\method(t,n, p, e)  		:	dict += hash(dict, GroupTrees(Subtrees(a,0), t)); // hash(dict, Subtrees(a,t)); 
+		case a:\constructor(n, p, e, s)	:	dict += Hash(dict, GroupTrees(Subtrees(a,0), t), t);
+		case a:\method(r,n, p, e, s) 	:	dict += Hash(dict, GroupTrees(Subtrees(a,0), t), t);
+		case a:\method(t,n, p, e)  		:	dict += Hash(dict, GroupTrees(Subtrees(a,0), t), t);
 	}
 	return dict;
 }
 
-// Since single statments will normally not be grouped together (only in block statements) we have to do it manually
-public list[tuple[node,int]] GroupTrees(list[tuple[node,int]] subtrees, int t) 
-{
-	list[tuple[node,int]] newList = [];
-	list[tuple[node,int]] statements = [];
-	for (tuple[node a,int b] l <- subtrees) {
-		switch(l.a) {
-			case \block(b)	: 	
-			{ 
-				newList += MakeBlocks(statements, t); 
-				//newList += Sublists(statements, t);
-				if (l.b >= t)
-					newList += l;
-				statements = [];
-			}
-			default 		:	statements += l;
-		}
-	}
-	return newList;
-}
-
-public list[tuple[node,int]] MakeBlocks(list[tuple[node,int]] statements, int t)
-{
-	newList = [];
-	int s = 0;		// Size of the block
-	int c = 0;		// Counter for statements
-	boundary = size(statements);
-	for (tuple[node a, int b] i <- statements) {
-		switch(i.a) {
-			case Statement x:	
-			{
-				tempList = [];
-				int q = 0;
-				while (q + c < boundary) {
-					tuple[node a, int b] newTup = statements[c + q]; 
-					s += newTup.b;
-					tempList += newTup;
-					q += 1;
-				}
-				if (s >= t) {
-					newList += MakeBlock(tempList);
-				}
-			}
-		}
-		c += 1;
-		s = 0;
-	}
-	return newList;
-}
-
-public tuple[node, int] MakeBlock(list[tuple[node,int]] statements)
-{
-	list[Statement] newStatements = [];
-	int s = 0;
-	int length = 0;
-	int endLine = 0;
-	int endColumn = 0;
-	
-	// Get location
-	tuple[node a ,int b] first = statements[0];
-	loc location;
-	loc last;
-	switch(first.a) {
-		case Statement b : { location = b@src; last = b@src;}
-	}
-	for (tuple[node a, int b] i <- statements) {
-		switch(i.a) {
-			case Statement b :
-			{
-				s += i.b;
-				newStatements += b;
-				endLine = b@src.end.line;
-				endColumn = b@src.end.column;
-				last = b@src;
-			}
-		}
-	}
-	length = last.offset - location.offset + last.length;
-	// Create new tuple
-	Statement statement = \block(newStatements);
-	statement@src = location(location.offset,length,<location.begin.line,location.begin.column>,<endLine,endColumn>);
-	return <statement, s>;
-}
-
 // Create map and hash the subtrees
-private map[node, list[node]] hash (map[node, list[node]] dict, list[tuple[node,int]] trees)
+private map[node, list[node]] Hash (map[node, list[node]] dict, list[tuple[node,int]] trees, int t)
 {
 	for (tuple[node a,int b] l <- trees) {
 		switch(l.a) {
@@ -149,8 +74,9 @@ private map[node, list[node]] hash (map[node, list[node]] dict, list[tuple[node,
 							break;
 						}
 					}
-				if (temp == false)
-					dict += (n : dict[n] + n);
+					if (temp == false && l.b >= t) {
+						dict += (n : dict[n] + n);
+					}
 				}
 				else
 					dict += (n : [n]);
@@ -161,7 +87,7 @@ private map[node, list[node]] hash (map[node, list[node]] dict, list[tuple[node,
 }
 
 // Filter out only subtrees with multiple instances (clones)
-private map[node,list[node]] filterClones(map[node,list[node]] trees)
+private map[node,list[node]] FilterClones(map[node,list[node]] trees)
 {
 	dict = ();
 	for(node a <- trees) {
@@ -208,29 +134,4 @@ public map[node,list[node]] Subclones(map[node,list[node]] trees)
 		}
 	}
 	return dict;
-}
-
-// Get all sublists with at least size t
-private list[tuple[node,int]] Sublists(list[tuple[node, int]] l, int t)
-{
-	lists = [];
-	for (i <- [0..size(l)]) {
-		sub = [];
-		s = 0;
-		for (j <- [i..size(l)]) {
-			if (i <= j) {
-				tuple[node a, int b] tup = l[i];
-				switch(tup.a) {
-					case Statement b : 
-					{
-						sub += l[j];
-						s += tup.b;
-						if (s >= t)
-							lists += MakeBlock(sub);
-					}
-				}
-			}
-		}
-	}
-	return lists;
 }
