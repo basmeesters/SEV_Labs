@@ -9,41 +9,16 @@ import List;
 import Map;
 import util::Math;
 import AST::Group;
-import DateTime;
-
-// The project locations
-public loc simple = |project://Hello|;
-public loc small = |project://smallsql0.21_src|;
-public loc big = |project://hsqldb-2.3.1|;
 
 // Just a shorter variant 
 public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,true);
 
-// Print the found duplicates
-public void PrintTrees(loc project, int t)
-{
-	time = now();
-	int sm =0;
-	ast = AST(project);
-	map[node,list[node]] trees = Subclones(FilterClones(MethodTrees(ast, t)));
-	int i =0;
-	for(node a <- trees) {
-		i += 1;
-		top-down-break visit(trees[a]) {
-			case Statement b 	: 	
-			{
-				println("<i> : <b@src>");
-				sm += (b@src.end.line - b@src.begin.line + 1);
-			}
-		}
-	}
-	println(sm);
-	println(createDuration(time, now()));
-}
-
 // Get all the subtrees given a node 
 public list[tuple[node,int]] Subtrees(node a, int t) = [<n,s> | /node n <- a, s <- [SizeTree(n)], s >= t];
 private int SizeTree(node n) = (0|it+1|/node _ <-n);
+
+// Get clones
+public map[node,list[node]] GetClones(loc project, int t)= 	Subclones(FilterClones(MethodTrees(AST(project), t)));
 
 // Get all subtrees within methods / constructors
 private map[node,list[node]] MethodTrees(set[Declaration] ast, int t)
@@ -99,7 +74,7 @@ private map[node,list[node]] FilterClones(map[node,list[node]] trees)
 	return dict;
 }
 
-public map[node,list[node]] Subclones(map[node,list[node]] trees)
+private map[node,list[node]] Subclones(map[node,list[node]] trees)
 {
 	dict = ();
 	for (tree <- trees) {

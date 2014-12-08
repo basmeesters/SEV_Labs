@@ -19,8 +19,8 @@ public list[tuple[node,int]] GroupTrees(list[tuple[node,int]] subtrees, int t)
 		switch(l.a) {
 			case \block(b)	: 	
 			{ 
-				//newList += MakeBlocks(statements, t); 
-				newList += Sublists(statements, t);
+				newList += MakeBlocks(statements, t); 
+				//newList += Sublists(statements, t);
 				if (l.b >= t)
 					newList += l;
 				statements = [];
@@ -98,14 +98,14 @@ public tuple[node, int] MakeBlock(list[tuple[node,int]] statements)
 private list[tuple[node,int]] Sublists(list[tuple[node, int]] l, int t)
 {
 	lists = [];
-	for (i <- [0..size(l)]) {
+	i = 0;
+	for (tuple[node a, int b] tup <- l) {
 		sub = [];
 		s = 0;
-		for (j <- [i..size(l)]) {
-			tuple[node a, int b] tup = l[i];
-			switch(tup.a) {
-				case Statement b : 
-				{
+		switch(tup.a) {
+			case Statement b : 
+			{
+				for (j <- [i..size(l)]) {
 					sub += l[j];
 					s += tup.b;
 					if (s >= t)
@@ -113,6 +113,7 @@ private list[tuple[node,int]] Sublists(list[tuple[node, int]] l, int t)
 				}
 			}
 		}
+		i += 1;
 	}
 	return lists;
 }
