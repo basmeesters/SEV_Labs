@@ -10,6 +10,8 @@ import Map;
 import util::Math;
 import DateTime;
 
+alias duplicationMap = map[list[Statement], list[list[Statement]]];
+
 // Just a shorter variant 
 public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,true);
 
@@ -24,28 +26,16 @@ public map[node,list[node]] GetClones(loc project, int t)= 	Subclones(FilterClon
 public Duration MethodTrees(set[Declaration] ast, int t)
 {
 	time = now();
-	map[node,list[node]] dict = ();
-	statements = [];
-	top-down visit(ast) {
-		case a:\constructor(n, p, e, s)	:	statements += MakeBlocks(GetStatements([s]), t); // dict += Hash(dict, GroupTrees(Subtrees(a,0), t), t);
-		case a:\method(r,n, p, e, s) 	:	statements += MakeBlocks(GetStatements([s]), t); // dict += Hash(dict, GroupTrees(Subtrees(a,0), t), t);
+	duplicationMap dict = ();
+	top-down-break visit(ast) {
+		case a:\constructor(n, p, e, s)	:	dict += MakeBlocks(dict, GetStatements([s]), t); 
+		case a:\method(r,n, p, e, s) 	:	dict += MakeBlocks(dict, GetStatements([s]), t);
 	}
-	for (tuple[loc a, list[Statement] b, int c] s <- statements)
-		println("<s.a>");
+	//dict = FilterClones(dict);
 	return createDuration(time, now());
 }
 
-public void GetSubs(set[Declaration] ast)
-{
-	statements = [];
-	visit(ast) {
-		case a:\constructor(n, p, e, s)	:	{statements += Subtrees(a, 0);println("1 : <Subtrees(a, 0)>"); }// dict += Hash(dict, GroupTrees(Subtrees(a,0), t), t);
-		case a:\method(r,n, p, e, s) 	:	{statements += Subtrees(a, 0);println("1 : <Subtrees(a, 0)>"); }
-	}
-		for (tuple[S a, int b] s <- statements)
-		println("<s.a>");
-}
-
+// Runs in less than 2 seconds on smallSQL
 public list[Statement] GetStatements(list[Statement] method)
 {
 	list[Statement] statements = [];
@@ -77,22 +67,40 @@ public list[tuple[loc,list[Statement], int]] Sublists(list[Statement] statements
 	list[tuple[loc,list[Statement], int]] lists = [];
 	i = 0;
 	amount = size(statements);
-	//println(amount);
 	for (s <- statements) {
 		sub = [];
 		c = 0;
 		int subsize = 0;
 		for (j <- [i..amount]) {
 			sub += statements[j];
-			tuple[loc a, list[Statement] b, int c] newBlock = MakeBlock(sub);
-			if (j - i >= t) {
-				lists += newBlock;
-			}
+			if (j - i >= t) 
+				lists += MakeBlock(sub);
 		}
 		i += 1;
 	}
-	//println(lists);
 	return lists;
+}
+
+// Runs in less than 50 seconds on smallSQL
+public list[list[Statement]] MakeBlocks(duplicationMap m, list[Statement] statements, int t)
+{
+	newDict = [];
+	int s = 0;		// Size of the block
+	int c = 0;		// Counter for statements
+	boundary = size(statements);
+	for (Statement x <- statements) {
+		tempList = [];
+		int q = t;
+		while (q + c < boundary) {
+			Statement newTup = statements[c + q]; 
+			tempList += newTup;
+			newDict += [tempList]; //Hash(m, tempList); // +=?  !!!!!!
+			q += 1;
+		}
+		c += 1;
+		s = 0;
+	}
+	return newDict;
 }
 
 public tuple[loc, list[Statement], int] MakeBlock(list[Statement] statements)
@@ -115,68 +123,28 @@ public tuple[loc, list[Statement], int] MakeBlock(list[Statement] statements)
 	return <newLocation, statements, endLine - startLine + 1>;
 }
 
-public list[tuple[loc, list[Statement], int]] MakeBlocks(list[Statement] statements, int t)
-{
-	newList = [];
-	int s = 0;		// Size of the block
-	int c = 0;		// Counter for statements
-	boundary = size(statements);
-	for (Statement x <- statements) {
-		tempList = [];
-		int q = 0;
-		while (q + c < boundary) {
-			Statement newTup = statements[c + q]; 
-			tempList += newTup;
-			q += 1;
-		}
-		if ((q - c) >= t) {
-			newList += MakeBlock(tempList);
-
-		}
-		c += 1;
-		s = 0;
-	}
-	return newList;
-}
-
 // Create map and hash the subtrees
-private map[node, list[node]] Hash (map[node, list[node]] dict, list[tuple[node,int]] trees, int t)
+public duplicationMap Hash (duplicationMap dict, list[Statement] n)
 {
-	for (tuple[node a,int b] l <- trees) {
-		switch(l.a) {
-			case Statement n : 
-			{
-				bool temp = false;
-				if (n in dict) {
-					for (j <- dict[n]) {
-						Statement i;
-						switch(j) { case Statement b : i = b; }
-						if (abs(i@src.begin.line - n@src.begin.line) <= 1) {
-							temp = true;
-							break;
-						}
-					}
-					if (temp == false && l.b >= t) {
-						dict += (n : dict[n] + n);
-					}
-				}
-				else
-					dict += (n : [n]);
-			}
-		}
-	}
+	//if (n in dict) {
+	//	dict += (n : dict[n] + [n]);
+	//}
+	//else
+		dict += (n : [n]);
 	return dict;
 }
 
 // Filter out only subtrees with multiple instances (clones)
-private map[node,list[node]] FilterClones(map[node,list[node]] trees)
+private duplicationMap FilterClones(duplicationMap trees)
 {
 	dict = ();
-	for(node a <- trees) {
+	for(list[Statement] a <- trees) {
 		s = size(trees[a]);
-			if (s > 1) {
-				dict += (a: trees[a]);
-			}
+		if (s > 1) {
+			dict += (a: trees[a]);
+			//println("<dict[a]>");
+			
+		}
 	}
 	return dict;
 }
