@@ -26,12 +26,15 @@ public map[node,list[node]] GetClones(loc project, int t)= 	Subclones(FilterClon
 public Duration MethodTrees(set[Declaration] ast, int t)
 {
 	time = now();
-	duplicationMap dict = ();
+	statements = [];
 	top-down-break visit(ast) {
-		case a:\constructor(n, p, e, s)	:	dict += MakeBlocks(dict, GetStatements([s]), t); 
-		case a:\method(r,n, p, e, s) 	:	dict += MakeBlocks(dict, GetStatements([s]), t);
+		case a:\constructor(n, p, e, s)	:	statements += MakeBlocks(GetStatements([s]), t); 
+		case a:\method(r,n, p, e, s) 	:	statements += MakeBlocks(GetStatements([s]), t);
 	}
 	//dict = FilterClones(dict);
+	// dict = Hash(statements);
+	//for (l <- dict)
+	//	println("<dict[l]> & <l>");
 	return createDuration(time, now());
 }
 
@@ -40,6 +43,7 @@ public list[Statement] GetStatements(list[Statement] method)
 {
 	list[Statement] statements = [];
 	for (s <- method) {
+		statements += s; 
 		switch(s) {
 			case \block(b) 						:	statements += GetStatements(b); 
 			case \do(b,_)						: 	statements += GetStatements([b]);
@@ -54,26 +58,24 @@ public list[Statement] GetStatements(list[Statement] method)
 			case \try(b,e)						:	{statements += GetStatements([b]); statements += GetStatements(e); }
 			case \try(b,e,_)					:	{statements += GetStatements([b]); statements += GetStatements(e); } 
 			case \catch(_,b)					:	statements += GetStatements([b]);
-			case \while(_,b)					:	statements += GetStatements([b]); 
-			default								:	statements += s; 
-			
+			case \while(_,b)					:	statements += GetStatements([b]); 			
 		}
 	}
 	return statements;
 }
 
-public list[tuple[loc,list[Statement], int]] Sublists(list[Statement] statements, int t)
+public list[tuple[loc, list[Statement], int]] Sublists(list[Statement] statements, int t)
 {
-	list[tuple[loc,list[Statement], int]] lists = [];
+	lists = [];
 	i = 0;
 	amount = size(statements);
 	for (s <- statements) {
 		sub = [];
 		c = 0;
 		int subsize = 0;
-		for (j <- [i..amount]) {
+		for (j <- [k|i + t < amount, k <- [i..amount]]) {
 			sub += statements[j];
-			if (j - i >= t) 
+			if (j -1 >= t)
 				lists += MakeBlock(sub);
 		}
 		i += 1;
@@ -81,8 +83,7 @@ public list[tuple[loc,list[Statement], int]] Sublists(list[Statement] statements
 	return lists;
 }
 
-// Runs in less than 50 seconds on smallSQL
-public list[list[Statement]] MakeBlocks(duplicationMap m, list[Statement] statements, int t)
+public list[tuple[loc, list[Statement], int]] MakeBlocks(list[Statement] statements, int t)
 {
 	newDict = [];
 	int s = 0;		// Size of the block
@@ -90,11 +91,12 @@ public list[list[Statement]] MakeBlocks(duplicationMap m, list[Statement] statem
 	boundary = size(statements);
 	for (Statement x <- statements) {
 		tempList = [];
-		int q = t;
+		int q = 0;
 		while (q + c < boundary) {
 			Statement newTup = statements[c + q]; 
 			tempList += newTup;
-			newDict += [tempList]; //Hash(m, tempList); // +=?  !!!!!!
+			if(q - c >= t)
+				newDict += MakeBlock(tempList); //Hash(m, tempList); // +=?  !!!!!!
 			q += 1;
 		}
 		c += 1;
@@ -124,13 +126,16 @@ public tuple[loc, list[Statement], int] MakeBlock(list[Statement] statements)
 }
 
 // Create map and hash the subtrees
-public duplicationMap Hash (duplicationMap dict, list[Statement] n)
+public map[list[Statement], list[loc]] Hash (list[tuple[loc, list[Statement], int]] statementList)
 {
-	//if (n in dict) {
-	//	dict += (n : dict[n] + [n]);
-	//}
-	//else
-		dict += (n : [n]);
+	//newDict = (distr | tuple[loc a, list[Statement] b, int c] s <- statementList);
+	dict =  (() | 
+		s.b in it ? 
+			(it +(s.b : it[s.b] + [s.a])) : 
+			(it + (s.b : [s.a]))
+			| 
+			tuple[loc a, list[Statement] b, int c] s <- statementList);
+	println(size(dict));
 	return dict;
 }
 
