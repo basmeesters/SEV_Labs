@@ -27,12 +27,13 @@ public Duration MethodTrees(set[Declaration] ast, int t)
 	}
 	//dict = FilterClones(dict);
 	map[list[Statement], rel[loc,list[Statement],int]] dict = Hash2(statements);
-	//for (s <- dict) {
-	//	l = dict[s];
-	//	println("<s>");
-	//	for (tuple[loc a,list[Statement] b,int c] i <- l)
-	//		println(i.a);
-	//}
+	dict = Subclones(dict);
+	for (s <- dict) {
+		l = dict[s];
+		println("<s>");
+		for (tuple[loc a,list[Statement] b,int c] i <- l)
+			println(i.a);
+	}
 	//println(size(dict));
 	return createDuration(time, now());
 }
@@ -126,39 +127,29 @@ public map[list[Statement], rel[loc,list[Statement],int]] Hash2(list[list[Statem
 	return newM;
 }
 
-private map[list[Statement],list[list[Statement]]] Subclones(map[node,list[node]] trees)
+private map[list[Statement], rel[loc,list[Statement],int]] Subclones(map[list[Statement], rel[loc,list[Statement],int]] trees)
 {
 	dict = ();
 	for (tree <- trees) {
-		switch(tree) {
-			case \block(bl)	: 	
-			{
-				bool clone = false;
-				bool clone2 = false;
-				node temp;
-				for (key <- dict) {
-					switch(key) {
-						case \block(k) :
-						{
-							if (bl <= k || /tree := key) {
-								clone = true;
-							}
-							else if(k <= bl || /key := tree) {
-								clone2 = true;
-								temp = key;
-							}
-						}
-					}
-				}
-				if (clone) ;
-				else if(clone2) {
-					dict = delete(dict, temp);
-					dict += (tree : trees[tree]);
-				}
-				else
-					dict += (tree : trees[tree]);
+		bool clone = false;
+		bool clone2 = false;
+		node temp;
+		for (key <- dict) {
+			if (tree <= key) {
+				clone = true;
+			}
+			else if(key <= tree) {
+				clone2 = true;
+				temp = key;
 			}
 		}
+		if (clone) ;
+		else if(clone2) {
+			dict = delete(dict, temp);
+			dict += (tree : trees[tree]);
+		}
+		else
+			dict += (tree : trees[tree]);
 	}
 	return dict;
 }
