@@ -15,13 +15,6 @@ alias duplicationMap = map[list[Statement], list[list[Statement]]];
 // Just a shorter variant 
 public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,true);
 
-// Get all the subtrees given a node 
-public list[tuple[node,int]] Subtrees(node a, int t) = [<n,s> | /node n <- a, s <- [SizeTree(n)], s >= t];
-private int SizeTree(node n) = (0|it+1|/node _ <-n);
-
-// Get clones
-public map[node,list[node]] GetClones(loc project, int t)= 	Subclones(FilterClones(MethodTrees(AST(project), t)));
-
 // Get all subtrees within methods / constructors
 public Duration MethodTrees(set[Declaration] ast, int t)
 {
@@ -62,25 +55,6 @@ public list[Statement] GetStatements(list[Statement] method)
 		}
 	}
 	return statements;
-}
-
-public list[tuple[loc, list[Statement], int]] Sublists(list[Statement] statements, int t)
-{
-	lists = [];
-	i = 0;
-	amount = size(statements);
-	for (s <- statements) {
-		sub = [];
-		c = 0;
-		int subsize = 0;
-		for (j <- [k|i + t < amount, k <- [i..amount]]) {
-			sub += statements[j];
-			if (j -1 >= t)
-				lists += MakeBlock(sub);
-		}
-		i += 1;
-	}
-	return lists;
 }
 
 public list[tuple[loc, list[Statement], int]] MakeBlocks(list[Statement] statements, int t)
@@ -135,22 +109,9 @@ public map[list[Statement], list[loc]] Hash (list[tuple[loc, list[Statement], in
 			(it + (s.b : [s.a]))
 			| 
 			tuple[loc a, list[Statement] b, int c] s <- statementList);
-	println(size(dict));
-	return dict;
-}
-
-// Filter out only subtrees with multiple instances (clones)
-private duplicationMap FilterClones(duplicationMap trees)
-{
-	dict = ();
-	for(list[Statement] a <- trees) {
-		s = size(trees[a]);
-		if (s > 1) {
-			dict += (a: trees[a]);
-			//println("<dict[a]>");
 			
-		}
-	}
+	// Filter out unique instances
+	newDict = (s : dict[s] |s <- dict, size(dict[s]) > 1);
 	return dict;
 }
 
