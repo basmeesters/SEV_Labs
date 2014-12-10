@@ -22,7 +22,7 @@ public int Print(loc project, int t)
 {
 	statements = MethodStatements(AST(project), t);
 	duplicationMap h = Hash(statements);
-	//h = Subclones(h);
+	h = Subclones(h);
 	totalSize = 0;
 	for (list[Statement] s <- h) {
 		println(s);
@@ -48,11 +48,14 @@ public list[list[Statement]] MethodStatements(set[Declaration] ast, int t)
 		case a:\constructor(n, p, e, s)	:	statements += MakeBlocks(GetStatements([s]), t); 
 		case a:\method(r,n, p, e, s) 	:	statements += MakeBlocks(GetStatements([s]), t);
 	}
+	//for (i <- statements)
+	//	println(MakeBlock(i));
+		
 	return statements;
 }
 
 // Get all subtrees within methods / constructors
-public list[Statement] MethodStatements2(set[Declaration] ast, int t)
+public list[Statement] MethodStatements2(set[Declaration] ast)
 {
 	statements = [];
 	top-down-break visit(ast) {
@@ -63,27 +66,38 @@ public list[Statement] MethodStatements2(set[Declaration] ast, int t)
 	return statements;
 }
 
+public void AllStatements(loc project)
+{
+	ast = AST(project);
+	s = 0;
+	 visit(ast) {
+		case Statement _			:	s += 1;
+	}
+	println(s);
+}
+
 // Get all statements in a particular method or block of statements (recursively)
 public list[Statement] GetStatements(list[Statement] method)
 {
 	list[Statement] statements = [];
+	Statement em = \block([]);
 	for (s <- method) {
 		//statements += s; 
 		switch(s) {
 			case \block(b) 						:	statements += GetStatements(b); 
-			case \do(b,_)						: 	statements += GetStatements([b]);
-			case \foreach(_,_,b)				:	statements += GetStatements([b]); 
-			case \for(_,_,_,b)					:	statements += GetStatements([b]); 
-			case \for(_,_,b)					:	statements += GetStatements([b]); 
-			case \if(_,b)						:   statements += GetStatements([b]);
-    		case \if(_,b, b2)					:   { statements += GetStatements([b]); statements += GetStatements([b2]); }
-    		case \label(_,b)					:   statements += GetStatements([b]);  
-			case \switch(_,b)					:	statements += GetStatements(b); 
-			case \synchronizedStatement(_,b) 	:	statements += GetStatements([b]); 
-			case \try(b,e)						:	{statements += GetStatements([b]); statements += GetStatements(e); }
-			case \try(b,e,_)					:	{statements += GetStatements([b]); statements += GetStatements(e); } 
-			case \catch(_,b)					:	statements += GetStatements([b]);
-			case \while(_,b)					:	statements += GetStatements([b]);
+			case m:\do(b,a)						: 	{m2 = \do(em,a); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+			case m:\foreach(a,a2,b)				:	{m2 = \foreach(a,a2,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); } 
+			case m:\for(a,a2,a3,b)				:	{m2 = \for(a,a2,a3,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+			case m:\for(a,a2,b)					:	{m2 = \for(a,a2,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); } 
+			case m:\if(a,b)						:   {m2 = \if(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+    		case m:\if(a,b, b2)					:   {m2 = \if(a,em, em); m2@src = m@src; statements += m2; statements += GetStatements([b]); statements += GetStatements([b2]); }
+    		case m:\label(a,b)					:   {m2 = \label(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }  
+			case m:\switch(a,b)					:	{m2 = \switch(a,[]); m2@src = m@src; statements += m2; statements += GetStatements(b); }
+			case m:\synchronizedStatement(a,b) 	:	{m2 = \synchronizedStatement(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); } 
+			case m:\try(b,e)					:	{m2 = \try(em,e); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+			case m:\try(b,e,f)					:	{m2 = \try(em,e,em); m2@src = m@src; statements += m2; statements += GetStatements([b]);statements += GetStatements([f]);} 
+			case m:\catch(a,b)					:	{m2 = \catch(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+			case m:\while(a,b)					:	{m2 = \while(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
 			default 							:	statements += s;					
 		}
 	}
@@ -102,7 +116,7 @@ public list[list[Statement]] MakeBlocks(list[Statement] statements, int t)
 		while (q + c < boundary) {
 			Statement newTup = statements[c + q]; 
 			tempList += newTup;
-			if(q - c + 1>= t)
+			if(q + 1>= t)
 				newDict += [tempList]; 
 			q += 1;
 		}
@@ -120,9 +134,9 @@ public tuple[loc, list[Statement], int] MakeBlock(list[Statement] statements)
 	Statement first = statements[0];
 	loc location = statements[0]@src;
 	int startLine = location.begin.line;
-	loc last;
-	for (Statement b <- statements)
-		last = b@src;
+	loc last = last(statements)@src;
+	//for (Statement b <- statements)
+	//	last = b@src;
 	endLine = last.end.line;
 	endColumn = last.end.column;
 	length = last.offset - location.offset + last.length;
@@ -139,7 +153,7 @@ public duplicationMap Hash(list[list[Statement]] statements)
 }
 
 // TODO improve filtering..
-private duplicationMap Subclones(duplicationMap trees)
+public duplicationMap Subclones(duplicationMap trees)
 {
 	dict = ();
 	for (tree <- trees) {
@@ -149,10 +163,22 @@ private duplicationMap Subclones(duplicationMap trees)
 		for (key <- dict) {
 			if (tree <= key) {
 				clone = true;
+				for (tuple[loc a,list[Statement] b,int c] k <- trees[key]) {
+					if (!(k.b <= key)) {
+						clone = false;
+						break;
+					}
+				}
 			}
 			else if(key <= tree) {
 				clone2 = true;
 				temp = key;
+				for (tuple[loc a,list[Statement] b,int c] k <- trees[key]) {
+					if (!(key <= k.b)) {
+						clone2 = false;
+						break;
+					}
+				}
 			}
 		}
 		if (clone) ;

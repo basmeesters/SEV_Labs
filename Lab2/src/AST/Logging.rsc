@@ -7,7 +7,10 @@ import IO;
 import util::FileSystem;
 import DateTime;
 import AST::Tree;
+import AST::Serializing;
 import String;
+import Set;
+import List;
 
 // Projects
 public loc simple = |project://Hello|;
@@ -28,6 +31,23 @@ public void Write(loc project, bool log, loc file, int threshold)
 	else 
 		Results(project, print, threshold);
 	
+}
+
+public void VisualReady(loc project, int threshold)
+{
+	totalSize = 0;
+	duplicationMap h = Subclones(Hash(MethodStatements(AST(project), threshold)));
+	for (list[Statement] s <- h) {
+		println(s);
+		tuple[loc a,list[Statement] b,int c] first = getOneFrom(h[s]);
+		int listSize = size(h[s]);
+		cloneSize = size(first.b) * (listSize -1);
+		totalSize += cloneSize;
+		println("<cloneSize>");
+		for (tuple[loc a,list[Statement] b,int c] tup <- h[s]) {
+			println(tup.a);
+		}
+	}
 }
 
 // TODO read
