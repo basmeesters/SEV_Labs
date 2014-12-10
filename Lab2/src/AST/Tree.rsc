@@ -10,34 +10,60 @@ import Map;
 import util::Math;
 import DateTime;
 import Set;
+import Relation;
 
-alias duplicationMap = map[list[Statement], list[list[Statement]]];
+alias duplicationMap = map[list[Statement], rel[loc,list[Statement],int]];
 
 // Just a shorter variant 
 public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,true);
 
-// Get all subtrees within methods / constructors
-public Duration MethodTrees(set[Declaration] ast, int t)
+// Print the results
+public int Print(loc project, int t)
 {
-	time = now();
+	statements = MethodStatements(AST(project), t);
+	duplicationMap h = Hash(statements);
+	//h = Subclones(h);
+	totalSize = 0;
+	for (list[Statement] s <- h) {
+		println(s);
+		tuple[loc a,list[Statement] b,int c] first = getOneFrom(h[s]);
+		int listSize = size(h[s]);
+		cloneSize = first.c * (listSize -1);
+		totalSize += cloneSize;
+		println("<cloneSize>");
+		for (tuple[loc a,list[Statement] b,int c] tup <- h[s]) {
+			println(tup.a);
+		}
+	}
+	println(totalSize);
+	return totalSize;
+}
+
+// Get all subtrees within methods / constructors
+public list[list[Statement]] MethodStatements(set[Declaration] ast, int t)
+{
 	statements = [];
 	top-down-break visit(ast) {
+		case a:\initializer(s)			:	statements += MakeBlocks(GetStatements([s]), t);
 		case a:\constructor(n, p, e, s)	:	statements += MakeBlocks(GetStatements([s]), t); 
 		case a:\method(r,n, p, e, s) 	:	statements += MakeBlocks(GetStatements([s]), t);
 	}
-	//dict = FilterClones(dict);
-	map[list[Statement], rel[loc,list[Statement],int]] dict = Hash2(statements);
-	dict = Subclones(dict);
-	for (s <- dict) {
-		l = dict[s];
-		println("<s>");
-		for (tuple[loc a,list[Statement] b,int c] i <- l)
-			println(i.a);
-	}
-	//println(size(dict));
-	return createDuration(time, now());
+	return statements;
 }
 
+// Get all subtrees within methods / constructors
+public list[Statement] MethodStatements2(set[Declaration] ast, int t)
+{
+	statements = [];
+	top-down-break visit(ast) {
+		case a:\initializer(s)			:	statements += GetStatements([s]);
+		case a:\constructor(n, p, e, s)	:	statements += GetStatements([s]);
+		case a:\method(r,n, p, e, s) 	:	statements += GetStatements([s]);
+	}
+	return statements;
+}
+
+// Get all statements in a particular method or block of statements (recursively)
 public list[Statement] GetStatements(list[Statement] method)
 {
 	list[Statement] statements = [];
@@ -57,13 +83,14 @@ public list[Statement] GetStatements(list[Statement] method)
 			case \try(b,e)						:	{statements += GetStatements([b]); statements += GetStatements(e); }
 			case \try(b,e,_)					:	{statements += GetStatements([b]); statements += GetStatements(e); } 
 			case \catch(_,b)					:	statements += GetStatements([b]);
-			case \while(_,b)					:	statements += GetStatements([b]); 	
-			default 							:	statements += s;		
+			case \while(_,b)					:	statements += GetStatements([b]);
+			default 							:	statements += s;					
 		}
 	}
 	return statements;
 }
 
+// Create sublists of the lists of statements bigger than the threshold t
 public list[list[Statement]] MakeBlocks(list[Statement] statements, int t)
 {
 	newDict = [];
@@ -84,6 +111,7 @@ public list[list[Statement]] MakeBlocks(list[Statement] statements, int t)
 	return newDict;
 }
 
+// Create a tuple of location, code and size of the code for a list of statements
 public tuple[loc, list[Statement], int] MakeBlock(list[Statement] statements)
 {
 	int endLine = 0;
@@ -102,32 +130,16 @@ public tuple[loc, list[Statement], int] MakeBlock(list[Statement] statements)
 	return <newLocation, statements, endLine - startLine + 1>;
 }
 
-// Create map and hash the subtrees
-public map[list[Statement], list[list[Statement]]] Hash (list[list[Statement]] statementList)
-{
-	//newDict = (distr | tuple[loc a, list[Statement] b, int c] s <- statementList);
-	dict = (s : [s] |s <- statementList);
-	//map[list[Statement], list[list[Statement]]] dict =  (() | 
-	//	s in it ? 
-	//		(it +(s : it[s] + [s])) : 
-	//		(it + (s : [s]))
-	//		| 
-	//		list[Statement] s <- statementList);
-			
-	// Filter out unique instances
-	newDict = (s : dict[s] |s <- dict, size(dict[s]) > 1);
-	return newDict;
-}
-
-public map[list[Statement], rel[loc,list[Statement],int]] Hash2(list[list[Statement]] statements)
+// Hash the statements to a map and filter out all keys with value sizes lower than 1
+public duplicationMap Hash(list[list[Statement]] statements)
 {
 	m = toMap([<s, MakeBlock(s)>| s <- statements]);
 	newM = (r : m[r] | r <- m, size(m[r]) > 1);
-	//newmM = (s : | r <- m, size(m
 	return newM;
 }
 
-private map[list[Statement], rel[loc,list[Statement],int]] Subclones(map[list[Statement], rel[loc,list[Statement],int]] trees)
+// TODO improve filtering..
+private duplicationMap Subclones(duplicationMap trees)
 {
 	dict = ();
 	for (tree <- trees) {
