@@ -17,60 +17,40 @@ public loc simple = |project://Hello|;
 public loc small = |project://smallsql0.21_src|;
 public loc big = |project://hsqldb-2.3.1|;
 
-public void Write(loc project, bool log, int threshold)
+public void Duplication(loc project, int threshold)
 {
 	str p = replaceAll(replaceAll("<project>", "|", ""), "/", "_");
-	loc file = |project://Lab2/<p>.txt|;
-	Write(project, log, file, threshold);
+	loc file = |project://Lab2/<p>.data|;
+	VisualFormat(project, threshold,  void (str string){appendToFile(file, string);});
 }
 
-public void Write(loc project, bool log, loc file, int threshold)
+public void VisualFormat(loc project, int threshold, void (str string) log)
 {
-	if (log) 
-		Results(project, void (str string){appendToFile(file, string);}, threshold);
-	else 
-		Results(project, print, threshold);
-	
-}
-
-public void VisualReady(loc project, int threshold)
-{
-	totalSize = 0;
 	duplicationMap h = Subclones(Hash(MethodStatements(AST(project), threshold)));
-	for (list[Statement] s <- h) {
-		println(s);
-		tuple[loc a,list[Statement] b,int c] first = getOneFrom(h[s]);
-		int listSize = size(h[s]);
-		cloneSize = size(first.b) * (listSize -1);
-		totalSize += cloneSize;
-		println("<cloneSize>");
-		for (tuple[loc a,list[Statement] b,int c] tup <- h[s]) {
-			println(tup.a);
-		}
-	}
+	VisualFormat(h, log);
 }
 
-// TODO read
-
-public void Results(loc project, void (str string) log, int t)
+public void VisualFormat(duplicationMap duplications, void (str string) log)
 {
-	time = now();
-	log("\n-----------------------------------------------------\nMeasure project at: <time>\n\n");
-	
-	// Actual work:
-	int sm =0;
-	map[node,list[node]] trees = GetClones(project, t);
-	int i =0;
-	for(node a <- trees) {
-		i += 1;
-		top-down-break visit(trees[a]) {
-			case Statement b 	: 	
-			{
-				log("<i> : <b@src>\n");
-				sm += (b@src.end.line - b@src.begin.line + 1);
-			}
+	relation = [];
+	for (k <- duplications) {
+		lrel[loc,list[Statement],int] positions = toList(duplications[k]);
+		relation += listPairs(positions);
+	}
+	for (tuple[tuple[loc a,list[Statement] b,int c] l1, tuple[loc a,list[Statement] b,int c] l2] r <- relation)
+		log("<r.l1.a.uri>, <r.l2.a.uri>, <r.l1.c>, <r.l1.a.begin.line>, <r.l1.a.end.line>, <r.l2.a.begin.line>, <r.l2.a.end.line>\n");
+}
+
+public list[tuple[&T, &T]] listPairs(list[&T] tlist) {
+	int listSize = size(tlist);
+	if(listSize <= 1)
+		return [];
+	list[tuple[&T, &T]] pairs = [];
+	for(i <- [0..listSize]) {
+		for(n <- [i..listSize]) {
+			if(i != n)
+				pairs += <tlist[i], tlist[n]>;
 		}
 	}
-	log("<sm>\n");
-	log("\n<createDuration(time, now())>\n-----------------------------------------------------");
+	return pairs;
 }
