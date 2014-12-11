@@ -1,0 +1,94 @@
+package testPack; 
+
+
+public class Main {
+	public static void main(String[] args) {
+		
+		
+		int i = 7;
+<highlight-me class='highlight-me n1'highlight-me-end>		boolean b = true;
+		int b = a;
+		int j = 4;
+<highlight-me class='highlight-me n3'highlight-me-end>        int bla = 2;
+        for (int i = 0; i < 5; i++) {</highlight-me>
+<highlight-me class='highlight-me n2'highlight-me-end>    		int b = a;
+    		int j = 4;
+            int bla = j + 2;
+            String i = "ka";
+            j += 5;
+            </highlight-me></highlight-me>
+        	String a = "";
+    		boolean b = true;
+    		for(int k = 3; k < 10; k+) {
+    			b = false;
+    		}
+    		int b = a;
+    		int j = 4;
+            int bla = j + 2;
+            String i = "ka";
+            j += 5;
+            try
+            {
+            	int k = 3;
+            }
+            catch(exception e)
+            {
+            	b = false;
+            }
+        }
+		int b = a;
+		int j = 4;
+	}
+	
+	public static void main(String[] args) {
+		int i = 7;
+		boolean b = true;
+		int j = 4;
+<highlight-me class='highlight-me n3'highlight-me-end>        int bla = 2;
+        for (int i = 0; i < 5; i++) {
+<highlight-me class='highlight-me n2'highlight-me-end>    		int b = a;
+    		int j = 4;
+            int bla = j + 2;
+            String i = "ka";
+            j += 5;
+            </highlight-me></highlight-me>
+            boolean b = true;
+<highlight-me class='highlight-me n0'highlight-me-end>            b = false;
+            b = true;
+            i += 10;
+            b = false;
+        }</highlight-me>
+		int b = a;
+		int j = 4;
+	}
+	
+	public static void main(String[] args) {
+		int i = 7;
+<highlight-me class='highlight-me n1'highlight-me-end>		boolean b = true;
+		int b = a;
+		int j = 4;
+        int bla = 2;
+        </highlight-me>
+        boolean b = true;
+<highlight-me class='highlight-me n0'highlight-me-end>        b = false;
+        b = true;
+        i += 10;
+        b = false;
+	}</highlight-me>
+	
+	public void Test()
+	{
+		int a = 1;
+		int b = 2;
+		int c = 3;
+		int d = 4;
+	}
+	
+	public void Test2()
+	{
+		int w = 1;
+		int x = 2;
+		int y = 3;
+		int z = 4;
+	}
+}

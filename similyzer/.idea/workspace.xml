@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b5b4416e-285c-460a-b34b-24c8bf5ff207" name="Default" comment="" />
+    <ignored path="similyzer.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="similyzer" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-10.064516" vertical-offset="312" max-vertical-offset="2080">
+              <caret line="24" column="7" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="similyzer.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/similyzer.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1354" max-vertical-offset="2288">
+              <caret line="64" column="36" selection-start-line="64" selection-start-column="27" selection-end-line="64" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="core.class.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core.class.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.3276699" vertical-offset="4566" max-vertical-offset="8606">
+              <caret line="186" column="13" selection-start-line="186" selection-start-column="13" selection-end-line="186" selection-end-column="13" />
+              <folding>
+                <marker date="1418312443620" expanded="true" signature="1760:1824" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="1894:2170" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="2221:2488" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="2303:2465" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="2356:2438" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="2531:2656" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="2768:3634" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="2811:3087" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="3139:3350" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="3165:3202" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="3165:3327" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="3218:3300" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="3393:3615" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="6048:6796" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="6208:6640" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="6341:6423" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="6478:6621" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="6880:7898" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="7058:7481" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="7182:7264" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="7319:7462" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="8782:8823" placeholder="..." />
+                <marker date="1418312443620" expanded="true" signature="8866:9157" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="data.rpc.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data.rpc.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-12.580646" vertical-offset="0" max-vertical-offset="1222">
+              <caret line="15" column="57" selection-start-line="15" selection-start-column="57" selection-end-line="15" selection-end-column="57" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ncolors.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/ncolors.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="156">
+              <caret line="0" column="48890" selection-start-line="0" selection-start-column="48890" selection-end-line="0" selection-end-column="48890" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="similyzer.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/similyzer.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1056" max-vertical-offset="1924">
+              <caret line="68" column="1" selection-start-line="68" selection-start-column="1" selection-end-line="68" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="true" />
+    </FindUsagesManager>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/core.php" />
+        <option value="$PROJECT_DIR$/rpc/data.rpc.php" />
+        <option value="$PROJECT_DIR$/com.class.php" />
+        <option value="$PROJECT_DIR$/comm.class.php" />
+        <option value="$PROJECT_DIR$/css/similyzer.css" />
+        <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/tester.php" />
+        <option value="$PROJECT_DIR$/css/ncolors.css" />
+        <option value="$PROJECT_DIR$/core.class.php" />
+        <option value="$PROJECT_DIR$/data.rpc.php" />
+        <option value="$PROJECT_DIR$/js/similyzer.js" />
+      </list>
+    </option>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-8" />
+    <option name="y" value="22" />
+    <option name="width" value="1936" />
+    <option name="height" value="1066" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="similyzer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="similyzer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="similyzer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="similyzer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="similyzer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="similyzer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="similyzer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="FullScreen" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\wamp\www\similyzer" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
+      <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <pass-parent-env-vars>false</pass-parent-env-vars>
+      <envs />
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b5b4416e-285c-460a-b34b-24c8bf5ff207" name="Default" comment="" />
+      <created>1417086080835</created>
+      <option name="number" value="Default" />
+      <updated>1417086080835</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="22" width="1936" height="1066" extended-state="7" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13767342" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32993197" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="156" max-vertical-offset="1976">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7046">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1418312443620" expanded="true" signature="1760:1824" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="1894:2170" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2221:2488" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2303:2465" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2356:2438" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2531:2656" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2768:3634" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2811:3087" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3139:3350" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3202" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3327" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3218:3300" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3393:3615" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6048:6796" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6208:6640" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6341:6423" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6478:6621" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6880:7898" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7058:7481" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7182:7264" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7319:7462" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8782:8823" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8866:9157" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.rpc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="104" max-vertical-offset="1222">
+          <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="156" max-vertical-offset="1976">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7046">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1418312443620" expanded="true" signature="1760:1824" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="1894:2170" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2221:2488" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2303:2465" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2356:2438" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2531:2656" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2768:3634" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2811:3087" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3139:3350" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3202" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3327" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3218:3300" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3393:3615" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6048:6796" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6208:6640" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6341:6423" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6478:6621" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6880:7898" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7058:7481" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7182:7264" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7319:7462" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8782:8823" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8866:9157" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.rpc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="104" max-vertical-offset="1222">
+          <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4026" max-vertical-offset="6526">
+          <caret line="166" column="26" selection-start-line="166" selection-start-column="23" selection-end-line="166" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/comm.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="182" max-vertical-offset="468">
+          <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.rpc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="806">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="1196">
+          <caret line="39" column="5" selection-start-line="39" selection-start-column="5" selection-end-line="39" selection-end-column="5" />
+          <folding>
+            <marker date="1418312443620" expanded="true" signature="1760:1824" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="1894:2170" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2221:2488" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2303:2465" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2356:2438" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2531:2656" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2768:3634" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2811:3087" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3139:3350" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3202" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3327" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3218:3300" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3393:3615" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6048:6796" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6208:6640" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6341:6423" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6478:6621" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6880:7898" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7058:7481" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7182:7264" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7319:7462" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8782:8823" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8866:9157" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_8.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="6269" max-vertical-offset="28652">
+          <caret line="252" column="9" selection-start-line="252" selection-start-column="9" selection-end-line="252" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6526">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.rpc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="156" max-vertical-offset="624">
+          <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="1196">
+          <caret line="39" column="5" selection-start-line="39" selection-start-column="5" selection-end-line="39" selection-end-column="5" />
+          <folding>
+            <marker date="1418312443620" expanded="true" signature="1760:1824" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="1894:2170" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2221:2488" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2303:2465" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2356:2438" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2531:2656" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2768:3634" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2811:3087" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3139:3350" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3202" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3327" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3218:3300" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3393:3615" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6048:6796" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6208:6640" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6341:6423" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6478:6621" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6880:7898" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7058:7481" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7182:7264" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7319:7462" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8782:8823" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8866:9157" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_8.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="6269" max-vertical-offset="28652">
+          <caret line="252" column="9" selection-start-line="252" selection-start-column="9" selection-end-line="252" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2860">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.htm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1885" max-vertical-offset="2704">
+          <caret line="98" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1872">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.htm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.61904764" vertical-offset="1495" max-vertical-offset="2704">
+          <caret line="77" column="17" selection-start-line="77" selection-start-column="17" selection-end-line="77" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_8.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="6269" max-vertical-offset="28652">
+          <caret line="252" column="9" selection-start-line="252" selection-start-column="9" selection-end-line="252" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/comm.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21744324" vertical-offset="0" max-vertical-offset="837">
+          <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/bootstrap.min.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="855">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/highcharts/js/highcharts-more.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.15204678" vertical-offset="0" max-vertical-offset="1534">
+          <caret line="5" column="27" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/similyzer.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1056" max-vertical-offset="1924">
+          <caret line="68" column="1" selection-start-line="68" selection-start-column="1" selection-end-line="68" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/ncolors.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="855">
+          <caret line="0" column="48890" selection-start-line="0" selection-start-column="48890" selection-end-line="0" selection-end-column="48890" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tester.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.096775" vertical-offset="73" max-vertical-offset="910">
+          <caret line="22" column="49" selection-start-line="22" selection-start-column="49" selection-end-line="22" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.rpc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.580646" vertical-offset="0" max-vertical-offset="1222">
+          <caret line="15" column="57" selection-start-line="15" selection-start-column="57" selection-end-line="15" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.064516" vertical-offset="312" max-vertical-offset="2080">
+          <caret line="24" column="7" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/similyzer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1354" max-vertical-offset="2288">
+          <caret line="64" column="36" selection-start-line="64" selection-start-column="27" selection-end-line="64" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3276699" vertical-offset="4566" max-vertical-offset="8606">
+          <caret line="186" column="13" selection-start-line="186" selection-start-column="13" selection-end-line="186" selection-end-column="13" />
+          <folding>
+            <marker date="1418312443620" expanded="true" signature="1760:1824" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="1894:2170" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2221:2488" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2303:2465" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2356:2438" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2531:2656" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2768:3634" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="2811:3087" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3139:3350" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3202" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3165:3327" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3218:3300" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="3393:3615" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6048:6796" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6208:6640" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6341:6423" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6478:6621" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="6880:7898" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7058:7481" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7182:7264" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="7319:7462" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8782:8823" placeholder="..." />
+            <marker date="1418312443620" expanded="true" signature="8866:9157" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
+
