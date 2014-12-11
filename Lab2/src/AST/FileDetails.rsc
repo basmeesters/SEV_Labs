@@ -23,7 +23,7 @@ public duplicationMap FileDuplications(loc p1, loc p2, int t, int tp)
 {
 	ast1 = createAstFromFile(p1, false);
 	ast2 = createAstFromFile(p2, false);
-	
+	list[list[Statement]] statements;
 	if (tp == 2) {
 		ast1 = SerializedAST(ast1);
 		ast2 = SerializedAST(ast2);
@@ -31,9 +31,10 @@ public duplicationMap FileDuplications(loc p1, loc p2, int t, int tp)
 		statements = MethodStatements(ast1, t);
 		statements += MethodStatements(ast2, t);
 	}
-	
-	statements = MethodStatements(ast1, t);
-	statements += MethodStatements(ast2, t);
+	else {
+		statements = MethodStatements({ast1}, t);
+		statements += MethodStatements({ast2}, t);
+	}
 	
 	duplicationMap h = Filter(Hash(statements));
 	return Subclones(h);

@@ -69,6 +69,17 @@ public list[Statement] GetStatements(list[Statement] method)
 	return statements;
 }
 
+public int AllStatements(loc project)
+{
+	ast = AST(project);
+	s = 0;
+	 visit(ast) {
+	 	case \block(_)				:   ;
+		case Statement _			:	s += 1;
+	}
+	return s;
+}
+
 // Create sublists of the lists of statements bigger than the threshold t
 public list[list[Statement]] MakeBlocks(list[Statement] statements, int t)
 {

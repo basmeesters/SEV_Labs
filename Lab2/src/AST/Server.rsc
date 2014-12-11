@@ -96,7 +96,7 @@ public bool analyze(str request) {
 		respond("analyzing", "Analyzing.. \<i\><location>\</i\>");
 		GenerateLocations(location);
 		Duplication(location, 5, 1);
-		//Duplication(location, 5, 2);
+		Duplication(location, 5, 2);
 		respond("analyzingDone", "Analyzed! \<i\><location>\</i\>");
 		return true;
 	}

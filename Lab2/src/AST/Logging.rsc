@@ -10,6 +10,7 @@ import AST::Tree;
 import AST::Serializing;
 import String;
 import Set;
+import util::Math;
 import List;
 import AST::FilesHandling;
 
@@ -56,9 +57,10 @@ private void PrintDetail(loc project, int t, int tp, void (str string) log)
 	if (tp == 2) 
 		ast = SerializedAST(ast);
 	statements = MethodStatements(ast, t);
+	amountOfStatements = AllStatements(project);
 	duplicationMap h = Filter(Hash(statements));
 	h = Subclones(h);
-	Report(h, project, log);	
+	Report(h, project, log, amountOfStatements);	
 	totalSize = 0;
 	int i = 1;
 	for (list[Statement] s <- h) {
@@ -113,27 +115,22 @@ public list[tuple[&T, &T]] ListPairs(list[&T] tlist) {
 	return pairs;
 }
 
-public void Report(loc project, int t, int tp, void (str string) log)
-{
-	ast = AST(project);
-	if (tp == 2) 
-		ast = SerializedAST(ast);
-	statements = MethodStatements(ast, t);
-	duplicationMap h = Filter(Hash(statements));
-	h = Subclones(h);
-	Report(h, project, log);	
-}
-
-public void Report(duplicationMap h, loc name, void (str string) log)
-{
-	log("The clone report of <name>:\n");
-	
+public void Report(duplicationMap h, loc name, void (str string) log, int amount)
+{	
 	totalSize = 0;
 	int i = 1;
 	int cloneClass = 0;
 	int clone = 0;
+	sample = 0;
+	int statementsSize = 0;
 	for (list[Statement] s <- h) {
 		tuple[loc a,list[Statement] b,int c] first = getOneFrom(h[s]);
+		k = size(h[s]);
+		for (tuple[loc a, list[Statement] b, int c] k <- h[s]) {
+			statementsSize += size(k.b);
+			sample =size(k.b);
+		}
+		statementsSize -= sample;
 		int listSize = size(h[s]);
 		cloneSize = first.c * (listSize -1);
 		if (cloneSize > cloneClass)
@@ -147,5 +144,6 @@ public void Report(duplicationMap h, loc name, void (str string) log)
 	log("Amount of clone classes <i>\n");
 	log("The biggest clone class has : <cloneClass> lines of code duplicated\n");
 	log("The biggest clone has: <clone> lines of code duplicated\n"); 
-	log("The total amount of cloned code is: <totalSize> lines of code\n\n");
+	log("The total amount of cloned code is: <totalSize> lines of code\n");
+	log("The percentage of cloning is: <toReal(statementsSize) / toReal(amount) * 100>\n\n");
 }
