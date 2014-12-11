@@ -20,9 +20,14 @@ public class Main {
 	 */
 	
 	
-	// randomtest
-	public String bas() {
-		return "Bas is awesome";
+	public Test() 
+	{
+		
 	}
-	// blabla
+	
+	public int addOne(int x) 
+	{
+		return 1 + x;
+	}
+	
 }

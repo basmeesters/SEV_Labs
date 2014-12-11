@@ -21,7 +21,7 @@ public loc big = |project://hsqldb-2.3.1|;
 public void GenerateLocations(loc project)
 {
 	list[loc] files = getFiles(project, "java");
-	loc locFile = |project://Lab2/locations.data|;
+	loc locFile = |file:///C:/wamp/www/similyzer/communicator/locations.data|;
 	writeFile(locFile, "");
 	for (f <- files)
 		appendToFile(locFile, "<f.uri>\n");
@@ -30,7 +30,10 @@ public void GenerateLocations(loc project)
 public void Duplication(loc project, int threshold, int tp)
 {
 	str p = replaceAll(replaceAll("<project>", "|", ""), "/", "_");
-	loc file = |project://Lab2/dup_<tp>_<p>.data|;
+	loc file = |file:///C:/wamp/www/similyzer/communicator/resultsType1.data|;
+	if(tp == 2)
+		file = |file:///C:/wamp/www/similyzer/communicator/resultsType2.data|;
+	writeFile(file, "");
 	VisualFormat(project, threshold, tp, void (str string){writeFile(file, string);});
 }
 

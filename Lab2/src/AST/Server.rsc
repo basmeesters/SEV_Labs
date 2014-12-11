@@ -1,9 +1,10 @@
-module Server
+module AST::Server
 import IO;
-import FilesHandling;
+import AST::FilesHandling;
 import DateTime;
 import List;
 import String;
+import AST::Logging;
 
 loc configReq = |file:///C:/wamp/www/similyzer/communicator/requests.data|;
 loc configRes = |file:///C:/wamp/www/similyzer/communicator/responses.data|;
@@ -79,7 +80,9 @@ public bool analyze(str request) {
 		clearConfig();
 		loc location = toLocation(path);
 		respond("analyzing", "Analyzing.. \<i\><location>\</i\>");
-		delay(5);
+		GenerateLocations(location);
+		Duplication(location, 5, 1);
+		Duplication(location, 5, 2);
 		respond("analyzingDone", "Analyzed! \<i\><location>\</i\>");
 		return true;
 	}
