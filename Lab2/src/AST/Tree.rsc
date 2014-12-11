@@ -17,63 +17,25 @@ alias duplicationMap = map[list[Statement], rel[loc,list[Statement],int]];
 // Just a shorter variant 
 public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,true);
 
-// Print the results
-public int Print(loc project, int t)
-{
-	statements = MethodStatements(AST(project), t);
-	duplicationMap h = Hash(statements);
-	h = Subclones(h);
-	totalSize = 0;
-	for (list[Statement] s <- h) {
-		println(s);
-		tuple[loc a,list[Statement] b,int c] first = getOneFrom(h[s]);
-		int listSize = size(h[s]);
-		cloneSize = first.c * (listSize -1);
-		totalSize += cloneSize;
-		println("<cloneSize>");
-		for (tuple[loc a,list[Statement] b,int c] tup <- h[s]) {
-			println(tup.a);
-		}
-	}
-	println(totalSize);
-	return totalSize;
-}
-
 // Get all subtrees within methods / constructors
 public list[list[Statement]] MethodStatements(set[Declaration] ast, int t)
 {
 	statements = [];
+	LOC = 0;
 	top-down-break visit(ast) {
 		case a:\initializer(s)			:	statements += MakeBlocks(GetStatements([s]), t);
-		case a:\constructor(n, p, e, s)	:	statements += MakeBlocks(GetStatements([s]), t); 
-		case a:\method(r,n, p, e, s) 	:	statements += MakeBlocks(GetStatements([s]), t);
-	}
-	//for (i <- statements)
-	//	println(MakeBlock(i));
-		
+		case a:\constructor(n, p, e, s)	:	
+			{ 
+				statements += MakeBlocks(GetStatements([s]), t); 
+				LOC += (a@src.end.line - a@src.begin.line);
+			}
+		case a:\method(r,n, p, e, s) 	:	
+		{ 
+			statements += MakeBlocks(GetStatements([s]), t); 
+			LOC += (a@src.end.line - a@src.begin.line);
+		}
+	}		
 	return statements;
-}
-
-// Get all subtrees within methods / constructors
-public list[Statement] MethodStatements2(set[Declaration] ast)
-{
-	statements = [];
-	top-down-break visit(ast) {
-		case a:\initializer(s)			:	statements += GetStatements([s]);
-		case a:\constructor(n, p, e, s)	:	statements += GetStatements([s]);
-		case a:\method(r,n, p, e, s) 	:	statements += GetStatements([s]);
-	}
-	return statements;
-}
-
-public void AllStatements(loc project)
-{
-	ast = AST(project);
-	s = 0;
-	 visit(ast) {
-		case Statement _			:	s += 1;
-	}
-	println(s);
 }
 
 // Get all statements in a particular method or block of statements (recursively)
@@ -84,21 +46,36 @@ public list[Statement] GetStatements(list[Statement] method)
 	for (s <- method) {
 		//statements += s; 
 		switch(s) {
-			case \block(b) 						:	statements += GetStatements(b); 
-			case m:\do(b,a)						: 	{m2 = \do(em,a); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
-			case m:\foreach(a,a2,b)				:	{m2 = \foreach(a,a2,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); } 
-			case m:\for(a,a2,a3,b)				:	{m2 = \for(a,a2,a3,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
-			case m:\for(a,a2,b)					:	{m2 = \for(a,a2,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); } 
-			case m:\if(a,b)						:   {m2 = \if(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
-    		case m:\if(a,b, b2)					:   {m2 = \if(a,em, em); m2@src = m@src; statements += m2; statements += GetStatements([b]); statements += GetStatements([b2]); }
-    		case m:\label(a,b)					:   {m2 = \label(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }  
-			case m:\switch(a,b)					:	{m2 = \switch(a,[]); m2@src = m@src; statements += m2; statements += GetStatements(b); }
-			case m:\synchronizedStatement(a,b) 	:	{m2 = \synchronizedStatement(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); } 
-			case m:\try(b,e)					:	{m2 = \try(em,e); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
-			case m:\try(b,e,f)					:	{m2 = \try(em,e,em); m2@src = m@src; statements += m2; statements += GetStatements([b]);statements += GetStatements([f]);} 
-			case m:\catch(a,b)					:	{m2 = \catch(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
-			case m:\while(a,b)					:	{m2 = \while(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
-			default 							:	statements += s;					
+			case \block(b) 						:	
+				statements += GetStatements(b); 
+			case m:\do(b,a)						: 	
+				{m2 = \do(em,a); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+			case m:\foreach(a,a2,b)				:	
+				{m2 = \foreach(a,a2,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); } 
+			case m:\for(a,a2,a3,b)				:	
+				{m2 = \for(a,a2,a3,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+			case m:\for(a,a2,b)					:	
+				{m2 = \for(a,a2,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); } 
+			case m:\if(a,b)						:   
+				{m2 = \if(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+    		case m:\if(a,b, b2)					:  
+    			 {m2 = \if(a,em, em); m2@src = m@src; statements += m2; statements += GetStatements([b]); statements += GetStatements([b2]); }
+    		case m:\label(a,b)					:   
+    			{m2 = \label(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }  
+			case m:\switch(a,b)					:	
+				{m2 = \switch(a,[]); m2@src = m@src; statements += m2; statements += GetStatements(b); }
+			case m:\synchronizedStatement(a,b) 	:	
+				{m2 = \synchronizedStatement(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); } 
+			case m:\try(b,e)					:	
+				{m2 = \try(em,e); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+			case m:\try(b,e,f)					:	
+				{m2 = \try(em,e,em); m2@src = m@src; statements += m2; statements += GetStatements([b]);statements += GetStatements([f]);} 
+			case m:\catch(a,b)					:	
+				{m2 = \catch(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+			case m:\while(a,b)					:	
+				{m2 = \while(a,em); m2@src = m@src; statements += m2; statements += GetStatements([b]); }
+			default 							:	
+				statements += s;					
 		}
 	}
 	return statements;
@@ -134,25 +111,26 @@ public tuple[loc, list[Statement], int] MakeBlock(list[Statement] statements)
 	Statement first = statements[0];
 	loc location = statements[0]@src;
 	int startLine = location.begin.line;
-	loc last = last(statements)@src;
-	//for (Statement b <- statements)
-	//	last = b@src;
-	endLine = last.end.line;
-	endColumn = last.end.column;
-	length = last.offset - location.offset + last.length;
+	int lastPosition = 0;
+	loc lastStatement = last(statements)@src;
+	//for (Statement b <- statements)	{
+	//	if (b@src.end.line > lastPosition) {
+	//		lastStatement = b@src;
+	//		lastPosition = b@src.end.line;
+	//	}
+	//}
+	endLine = lastStatement.end.line;
+	endColumn = lastStatement.end.column;
+	length = lastStatement.offset - location.offset + lastStatement.length;
 	newLocation = location(location.offset,length,<location.begin.line,location.begin.column>,<endLine,endColumn>);
 	return <newLocation, statements, endLine - startLine + 1>;
 }
 
 // Hash the statements to a map and filter out all keys with value sizes lower than 1
-public duplicationMap Hash(list[list[Statement]] statements)
-{
-	m = toMap([<s, MakeBlock(s)>| s <- statements]);
-	newM = (r : m[r] | r <- m, size(m[r]) > 1);
-	return newM;
-}
+public duplicationMap Hash(list[list[Statement]] statements) = toMap([<s, MakeBlock(s)>| s <- statements]);
+public duplicationMap Filter(duplicationMap m) = (r : m[r] | r <- m, size(m[r]) > 1);
+public set[loc] Locations(list[Statement] statements) = {takeOnFrom(f).uri |  list[Statement] f <- s};
 
-// TODO improve filtering..
 public duplicationMap Subclones(duplicationMap trees)
 {
 	dict = ();
@@ -163,22 +141,22 @@ public duplicationMap Subclones(duplicationMap trees)
 		for (key <- dict) {
 			if (tree <= key) {
 				clone = true;
-				for (tuple[loc a,list[Statement] b,int c] k <- trees[key]) {
-					if (!(k.b <= key)) {
-						clone = false;
-						break;
-					}
-				}
+				//for (tuple[loc a,list[Statement] b,int c] k <- trees[key]) {
+				//	if (!(k.b <= key)) {
+				//		clone = false;
+				//		break;
+				//	}
+				//}
 			}
 			else if(key <= tree) {
 				clone2 = true;
 				temp = key;
-				for (tuple[loc a,list[Statement] b,int c] k <- trees[key]) {
-					if (!(key <= k.b)) {
-						clone2 = false;
-						break;
-					}
-				}
+				//for (tuple[loc a,list[Statement] b,int c] k <- trees[key]) {
+				//	if (!(key <= k.b)) {
+				//		clone2 = false;
+				//		break;
+				//	}
+				//}
 			}
 		}
 		if (clone) ;

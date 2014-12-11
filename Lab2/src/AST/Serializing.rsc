@@ -21,14 +21,15 @@ public set[Declaration] SerializedAST(set[Declaration] ast)
 {
 	return visit (ast) 
 	{
-		case \simpleName(name) 					=> \simpleName("var") 
-		case \constructor(name, p, e, s)		=> \constructor("constructor",p,e,s) 
-		case \method(r,name, p, e, s) 			=> \method(r,"function", p, e, s) 
-		case \method(t,name, p, e)  			=> \method(t,"function", p, e)
-		case \parameter(t, name, e)				=> \parameter(t, "x", e)	
-		case \variable(name, e)					=> \variable("var", e)	
-    	case \variable(name, e, i)				=> \variable("var", e, i)	
-    	case \type(t)							=> \type(\boolean())
+		case a:\simpleName(name) 					=> {b = \simpleName("var"); b@src = a@src; }
+		case a:\constructor(name, p, e, s)			=> {b = \constructor("constructor",p,e,s); b@src = a@src; } 
+		case a:\method(r,name, p, e, s) 			=> {b = \method(r,"function", p, e, s); b@src = a@src; } 
+		case a:\method(t,name, p, e)  				=> {b = \method(t,"function", p, e); b@src = a@src; }
+		case a:\parameter(t, name, e)				=> {b = \parameter(t, "x", e); b@src = a@src; }	
+		case a:\variable(name, e)					=> {b = \variable("var", e)	; b@src = a@src; }
+    	case a:\variable(name, e, i)				=> {b = \variable("var", e, i); b@src = a@src; }	
+    	case a:\type(TypeSymbol)					=> a
+    	case a:\type(Type t)						=> {b = \type(\int()); b@src = a@src; }
 	}
 }
 

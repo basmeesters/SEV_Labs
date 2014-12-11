@@ -11,37 +11,89 @@ import AST::Serializing;
 import String;
 import Set;
 import List;
+import AST::FilesHandling;
 
 // Projects
 public loc simple = |project://Hello|;
 public loc small = |project://smallsql0.21_src|;
 public loc big = |project://hsqldb-2.3.1|;
 
-public void Duplication(loc project, int threshold)
+public void GenerateLocations(loc project)
+{
+	list[loc] files = getFiles(project, "java");
+	loc locFile = |project://Lab2/locations.data|;
+	writeFile(locFile, "");
+	for (f <- files)
+		appendToFile(locFile, "<f.uri>\n");
+}
+
+public void Duplication(loc project, int threshold, int tp)
 {
 	str p = replaceAll(replaceAll("<project>", "|", ""), "/", "_");
-	loc file = |project://Lab2/<p>.data|;
-	VisualFormat(project, threshold,  void (str string){appendToFile(file, string);});
+	loc file = |project://Lab2/dup_<tp>_<p>.data|;
+	VisualFormat(project, threshold, tp, void (str string){writeFile(file, string);});
 }
 
-public void VisualFormat(loc project, int threshold, void (str string) log)
+public void Print(loc project, int t, int tp, bool log)
 {
-	duplicationMap h = Subclones(Hash(MethodStatements(AST(project), threshold)));
-	VisualFormat(h, log);
+	str p = replaceAll(replaceAll("<project>", "|", ""), "/", "_");
+	loc file = |project://Lab2/data_<p>.data|;
+	if (log)
+		PrintDetail(project, t,  tp, void (str string){writeFile(file, string);});
+	else 
+		PrintDetail(project, t, tp, print);
 }
 
-public void VisualFormat(duplicationMap duplications, void (str string) log)
+// Print the results
+private void PrintDetail(loc project, int t, int tp, void (str string) log)
+{
+	time = now();
+	log("Clone detection for project <project>\n");
+	ast = AST(project);
+	if (tp == 2) 
+		ast = SerializedAST(ast);
+	statements = MethodStatements(ast, t);
+	duplicationMap h = Filter(Hash(statements));
+	h = Subclones(h);
+	totalSize = 0;
+	int i = 1;
+	for (list[Statement] s <- h) {
+		log("Clone class # <i>\n");
+		tuple[loc a,list[Statement] b,int c] first = getOneFrom(h[s]);
+		int listSize = size(h[s]);
+		cloneSize = first.c * (listSize -1);
+		totalSize += cloneSize;
+		for (tuple[loc a,list[Statement] b,int c] tup <- h[s]) {
+			log("<tup.a>\n");
+		}
+		log("Total class duplication size: <cloneSize>\n\n");
+		i += 1;
+	}
+	log("Total size: <totalSize>\n");
+	log("<createDuration(time, now())>\n");
+}
+
+public void VisualFormat(loc project, int threshold, int tp, void (str string) log)
+{
+	ast = AST(project);
+	if (tp == 2)
+		ast = SerializedAST(ast);
+	duplicationMap h = Subclones(Filter(Hash(MethodStatements(ast, threshold))));
+	VisualFormat(h, tp, log);
+}
+
+public void VisualFormat(duplicationMap duplications, int tp, void (str string) log)
 {
 	relation = [];
 	for (k <- duplications) {
 		lrel[loc,list[Statement],int] positions = toList(duplications[k]);
-		relation += listPairs(positions);
+		relation += ListPairs(positions);
 	}
 	for (tuple[tuple[loc a,list[Statement] b,int c] l1, tuple[loc a,list[Statement] b,int c] l2] r <- relation)
-		log("<r.l1.a.uri>, <r.l2.a.uri>, <r.l1.c>, <r.l1.a.begin.line>, <r.l1.a.end.line>, <r.l2.a.begin.line>, <r.l2.a.end.line>\n");
+		log("<r.l1.a.uri>,<r.l2.a.uri>,<r.l1.c>,<r.l1.a.begin.line>,<r.l1.a.end.line>,<r.l2.a.begin.line>,<r.l2.a.end.line>\n");
 }
 
-public list[tuple[&T, &T]] listPairs(list[&T] tlist) {
+public list[tuple[&T, &T]] ListPairs(list[&T] tlist) {
 	int listSize = size(tlist);
 	if(listSize <= 1)
 		return [];

@@ -1,4 +1,4 @@
-module FilesHandling
+module AST::FilesHandling
 
 import util::FileSystem;
 import IO;
