@@ -72,7 +72,7 @@ public bool restartServer() {
 public bool respond(str command, str response) {
 	if(exists(configReq) == false)
 		writeFile(configRes, "");
-	appendToFile(configRes, "\n<command>:<response>");
+	appendToFile(configRes, "\n<command>::<response>");
 	println("response: <response>");
 	return true;
 }
@@ -80,9 +80,9 @@ public bool respond(str command, str response) {
 public bool comparePair(request) {
 	if (/[:]<file1:.*>[:][:]<file2:.*>[:][:]<clonesType:.*>$/ := request) {
 		clearConfig();
-		respond("comparing", "Comparing Files..");
+		respond("comparing", "Comparing Files.. <file1> <file2> <clonesType>");
 		Format(toLocation(file1), toLocation(file2), 5, toInt(clonesType));
-		respond("comparingDone", "Files compared!");
+		respond("comparingDone::<file1>::<file2>::<clonesType>", "Files compared!");
 		return true;
 	}
 	respond("error", "Request is invalid! (<request>)");
