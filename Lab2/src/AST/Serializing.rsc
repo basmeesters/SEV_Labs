@@ -16,6 +16,7 @@ public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,
 // https://github.com/cwi-swat/rascal/blob/master/src/org/rascalmpl/library/lang/java/m3/AST.rsc
 public set[Declaration] SerializedAST(loc project) = SerializedAST(AST(project));
 
+public set[Declaration] SerializedAST(Declaration d) = SerializedAST(SerializedAST({d}));
 // Serialize the AST by replacing variable and method names
 public set[Declaration] SerializedAST(set[Declaration] ast) 
 {

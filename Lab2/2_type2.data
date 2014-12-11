@@ -260,7 +260,7 @@ public class ExpressionArithmetic extends Expression {
 	
     double getDouble() throws java.lang.Exception {
         if(isNull()) return 0;
-<highlight-me class='highlight-me n1'highlight-me-end>        int dataType = getDataType();
+<highlight-me class='highlight-me n9'highlight-me-end>        int dataType = getDataType();
         switch(dataType){
             case SQLTokenizer.BIT:
             case SQLTokenizer.BOOLEAN:
@@ -307,7 +307,7 @@ public class ExpressionArithmetic extends Expression {
 
     float getFloat() throws java.lang.Exception {
         if(isNull()) return 0;
-<highlight-me class='highlight-me n1'highlight-me-end>        int dataType = getDataType();
+<highlight-me class='highlight-me n9'highlight-me-end>        int dataType = getDataType();
         switch(dataType){
             case SQLTokenizer.BIT:
             case SQLTokenizer.BOOLEAN:
@@ -473,27 +473,27 @@ public class ExpressionArithmetic extends Expression {
     
     Object getObject() throws java.lang.Exception {
         if(isNull()) return null;
-<highlight-me class='highlight-me n14'highlight-me-end><highlight-me class='highlight-me n13'highlight-me-end><highlight-me class='highlight-me n7'highlight-me-end><highlight-me class='highlight-me n6'highlight-me-end><highlight-me class='highlight-me n5'highlight-me-end><highlight-me class='highlight-me n0'highlight-me-end>        int dataType = getDataType();
+<highlight-me class='highlight-me n10'highlight-me-end>        int dataType = getDataType();
         switch(dataType){
-<highlight-me class='highlight-me n12'highlight-me-end>            case SQLTokenizer.BIT:
+            case SQLTokenizer.BIT:
             case SQLTokenizer.BOOLEAN:
-                    return getBoolean() ? Boolean.TRUE : Boolean.FALSE;
-            case SQLTokenizer.BINARY:
+<highlight-me class='highlight-me n4'highlight-me-end>                    return getBoolean() ? Boolean.TRUE : Boolean.FALSE;
+<highlight-me class='highlight-me n3'highlight-me-end>            case SQLTokenizer.BINARY:
             case SQLTokenizer.VARBINARY:
                     return getBytes();
             case SQLTokenizer.TINYINT:
             case SQLTokenizer.SMALLINT:
             case SQLTokenizer.INT:
-                    return new Integer( getInt() );
-            case SQLTokenizer.BIGINT:
+<highlight-me class='highlight-me n5'highlight-me-end>                    return new Integer( getInt() );</highlight-me>
+            case SQLTokenizer.BIGINT:</highlight-me>
                     return new Long( getLong() );
             case SQLTokenizer.REAL:
                     return new Float( getFloat() );
             case SQLTokenizer.FLOAT:
             case SQLTokenizer.DOUBLE:
-                    return new Double( getDouble() );</highlight-me>
-            case SQLTokenizer.MONEY:</highlight-me>
-            case SQLTokenizer.SMALLMONEY:</highlight-me>
+                    return new Double( getDouble() );
+            case SQLTokenizer.MONEY:
+            case SQLTokenizer.SMALLMONEY:
                     return Money.createFromUnscaledValue( getMoney() );
             case SQLTokenizer.NUMERIC:
             case SQLTokenizer.DECIMAL:
@@ -503,7 +503,7 @@ public class ExpressionArithmetic extends Expression {
             case SQLTokenizer.VARCHAR:
             case SQLTokenizer.NVARCHAR:
             case SQLTokenizer.LONGNVARCHAR:</highlight-me>
-            case SQLTokenizer.LONGVARCHAR:</highlight-me></highlight-me>
+            case SQLTokenizer.LONGVARCHAR:
             		return getString( left.getString(), right.getString() );</highlight-me>
             case SQLTokenizer.JAVA_OBJECT:
                     Object lObj = left.getObject();
@@ -514,13 +514,13 @@ public class ExpressionArithmetic extends Expression {
                     else
                         return getString( lObj.toString(), rObj.toString() );
             case SQLTokenizer.LONGVARBINARY:
-<highlight-me class='highlight-me n4'highlight-me-end><highlight-me class='highlight-me n3'highlight-me-end><highlight-me class='highlight-me n2'highlight-me-end>                    return getBytes();
+<highlight-me class='highlight-me n0'highlight-me-end>                    return getBytes();
 			case SQLTokenizer.DATE:
 			case SQLTokenizer.TIME:
 			case SQLTokenizer.TIMESTAMP:
-			case SQLTokenizer.SMALLDATETIME:</highlight-me>
+			case SQLTokenizer.SMALLDATETIME:
 				return new DateTime( getLong(), dataType );
-            case SQLTokenizer.UNIQUEIDENTIFIER:</highlight-me>
+            case SQLTokenizer.UNIQUEIDENTIFIER:
                     return getBytes();
             default: throw createUnspportedDataType();
         }</highlight-me>
@@ -559,7 +559,7 @@ public class ExpressionArithmetic extends Expression {
 						case UNEQUALS:  return left.getBoolean() != right.getBoolean();
 					}
 					//break; interpret it as BIT 
-            case SQLTokenizer.TINYINT:
+<highlight-me class='highlight-me n1'highlight-me-end>            case SQLTokenizer.TINYINT:
             case SQLTokenizer.SMALLINT:
             case SQLTokenizer.INT:
             case SQLTokenizer.BIT:
@@ -567,7 +567,7 @@ public class ExpressionArithmetic extends Expression {
 						case IN:
 						case EQUALS_NULL:
                         case EQUALS:    return left.getInt() == right.getInt();
-                        case GREATER:   return left.getInt() >  right.getInt();
+                        case GREATER:   return left.getInt() >  right.getInt();</highlight-me>
                         case GRE_EQU:   return left.getInt() >= right.getInt();
                         case LESSER:    return left.getInt() <  right.getInt();
                         case LES_EQU:   return left.getInt() <= right.getInt();
@@ -580,14 +580,14 @@ public class ExpressionArithmetic extends Expression {
                     }
             case SQLTokenizer.BIGINT:
 			case SQLTokenizer.TIMESTAMP:
-			case SQLTokenizer.TIME:
+<highlight-me class='highlight-me n1'highlight-me-end>			case SQLTokenizer.TIME:
 			case SQLTokenizer.DATE:
 			case SQLTokenizer.SMALLDATETIME:
                     switch(operation){
 						case IN:
 						case EQUALS_NULL:
                         case EQUALS:    return left.getLong() == right.getLong();
-                        case GREATER:   return left.getLong() >  right.getLong();
+                        case GREATER:   return left.getLong() >  right.getLong();</highlight-me>
                         case GRE_EQU:   return left.getLong() >= right.getLong();
                         case LESSER:    return left.getLong() <  right.getLong();
                         case LES_EQU:   return left.getLong() <= right.getLong();
@@ -654,16 +654,16 @@ public class ExpressionArithmetic extends Expression {
 						return left.getNumeric().getSignum() != 0;
 					int comp = left.getNumeric().compareTo( right.getNumeric() );
 					switch(operation){
-<highlight-me class='highlight-me n15'highlight-me-end><highlight-me class='highlight-me n11'highlight-me-end><highlight-me class='highlight-me n9'highlight-me-end>						case IN:
-<highlight-me class='highlight-me n10'highlight-me-end>						case EQUALS_NULL:
+<highlight-me class='highlight-me n8'highlight-me-end>						case IN:
+						case EQUALS_NULL:
 						case EQUALS:    return comp == 0;
-						case GREATER:   return comp >  0;
-						case GRE_EQU:   return comp >= 0;</highlight-me>
+<highlight-me class='highlight-me n7'highlight-me-end>						case GREATER:   return comp >  0;
+						case GRE_EQU:   return comp >= 0;
 						case LESSER:    return comp <  0;
 						case LES_EQU:   return comp <= 0;
 						case UNEQUALS:  return comp != 0;
-						case BETWEEN:</highlight-me></highlight-me>
-										return comp >= 0 && 0 >= left.getNumeric().compareTo( right2.getNumeric() );</highlight-me>
+						case BETWEEN:
+										return comp >= 0 && 0 >= left.getNumeric().compareTo( right2.getNumeric() );</highlight-me></highlight-me>
                         default:
                         	return getNumeric().getSignum() != 0;
 					}
@@ -679,16 +679,16 @@ public class ExpressionArithmetic extends Expression {
                     final String rightStr = right.getString();
                     int comp = String.CASE_INSENSITIVE_ORDER.compare( leftStr, rightStr );
                     switch(operation){
-<highlight-me class='highlight-me n15'highlight-me-end><highlight-me class='highlight-me n11'highlight-me-end><highlight-me class='highlight-me n9'highlight-me-end>						case IN:
-<highlight-me class='highlight-me n10'highlight-me-end>						case EQUALS_NULL:
+<highlight-me class='highlight-me n8'highlight-me-end>						case IN:
+						case EQUALS_NULL:
                         case EQUALS:    return comp == 0;
-                        case GREATER:   return comp >  0;
-                        case GRE_EQU:   return comp >= 0;</highlight-me>
+<highlight-me class='highlight-me n7'highlight-me-end>                        case GREATER:   return comp >  0;
+                        case GRE_EQU:   return comp >= 0;
                         case LESSER:    return comp <  0;
                         case LES_EQU:   return comp <= 0;
                         case UNEQUALS:  return comp != 0;
-                        case BETWEEN:</highlight-me></highlight-me>
-                                        return comp >= 0 && 0 >= String.CASE_INSENSITIVE_ORDER.compare( leftStr, right2.getString() );</highlight-me>
+                        case BETWEEN:
+                                        return comp >= 0 && 0 >= String.CASE_INSENSITIVE_ORDER.compare( leftStr, right2.getString() );</highlight-me></highlight-me>
                         case ADD:       return Utils.string2boolean(leftStr + rightStr);
                     }
                     break;}
@@ -701,16 +701,16 @@ public class ExpressionArithmetic extends Expression {
                     byte[] rightBytes= right.getBytes();
                     int comp = Utils.compareBytes( leftBytes, rightBytes);
                     switch(operation){
-<highlight-me class='highlight-me n15'highlight-me-end><highlight-me class='highlight-me n11'highlight-me-end><highlight-me class='highlight-me n9'highlight-me-end>						case IN:
-<highlight-me class='highlight-me n10'highlight-me-end>						case EQUALS_NULL:
+<highlight-me class='highlight-me n8'highlight-me-end>						case IN:
+						case EQUALS_NULL:
                         case EQUALS:    return comp == 0;
-                        case GREATER:   return comp >  0;
-                        case GRE_EQU:   return comp >= 0;</highlight-me>
+<highlight-me class='highlight-me n7'highlight-me-end>                        case GREATER:   return comp >  0;
+                        case GRE_EQU:   return comp >= 0;
                         case LESSER:    return comp <  0;
                         case LES_EQU:   return comp <= 0;
                         case UNEQUALS:  return comp != 0;
-                        case BETWEEN:</highlight-me></highlight-me>
-                                        return comp >= 0 && 0 >= Utils.compareBytes( leftBytes, right2.getBytes() );</highlight-me>
+                        case BETWEEN:
+                                        return comp >= 0 && 0 >= Utils.compareBytes( leftBytes, right2.getBytes() );</highlight-me></highlight-me>
                     }
                     break;}
         }
@@ -746,12 +746,12 @@ public class ExpressionArithmetic extends Expression {
 			case UNEQUALS:
 			case BETWEEN:
 			case OR:
-<highlight-me class='highlight-me n8'highlight-me-end>			case AND:
+			case AND:
 			case NOT:
 			case LIKE:
 			case ISNULL:
 			case ISNOTNULL:
-			 	return SQLTokenizer.BOOLEAN;</highlight-me>
+			 	return SQLTokenizer.BOOLEAN;
             default:
             	return getDataType(left, right);
         }
@@ -784,12 +784,12 @@ public class ExpressionArithmetic extends Expression {
     boolean isNull() throws Exception{
         switch(operation){
 	        case OR:
-<highlight-me class='highlight-me n8'highlight-me-end>	        case AND:
+	        case AND:
 	        case NOT:
 	        case LIKE:
 	        case ISNULL:
 			case ISNOTNULL:
-			case IN:</highlight-me>
+			case IN:
 							return false; //Boolean operations return ever a result ???, but at least ISNULL and ISNOTNULL
             case NEGATIVE: 
             case BIT_NOT:
@@ -875,8 +875,8 @@ public class ExpressionArithmetic extends Expression {
     static int getOperationFromToken( int value ){
         switch(value){
             case SQLTokenizer.PLUS:         return ADD;
-            case SQLTokenizer.MINUS:        return SUB;
-            case SQLTokenizer.ASTERISK:     return MUL;
+<highlight-me class='highlight-me n2'highlight-me-end>            case SQLTokenizer.MINUS:        return SUB;
+<highlight-me class='highlight-me n2'highlight-me-end>            case SQLTokenizer.ASTERISK:     return MUL;
             case SQLTokenizer.SLACH:        return DIV;
             case SQLTokenizer.PERCENT:      return MOD;
             case SQLTokenizer.EQUALS:       return EQUALS;
@@ -895,8 +895,8 @@ public class ExpressionArithmetic extends Expression {
             case SQLTokenizer.BIT_OR:       return BIT_OR;
             case SQLTokenizer.BIT_AND:      return BIT_AND;
             case SQLTokenizer.BIT_XOR:      return BIT_XOR;
-            case SQLTokenizer.TILDE:        return BIT_NOT;
-            default:                        return 0;
+            case SQLTokenizer.TILDE:        return BIT_NOT;</highlight-me>
+            default:                        return 0;</highlight-me>
         }
     }
     
@@ -923,16 +923,16 @@ public class ExpressionArithmetic extends Expression {
 	static int getBestNumberDataType(int paramDataType){
 		int dataTypeIdx = Utils.indexOf( paramDataType, DatatypeRange);
 		if(dataTypeIdx >= NVARCHAR_IDX)
-			return SQLTokenizer.DOUBLE;
+<highlight-me class='highlight-me n6'highlight-me-end>			return SQLTokenizer.DOUBLE;
 		if(dataTypeIdx >= INT_IDX)
-			return SQLTokenizer.INT;
+<highlight-me class='highlight-me n6'highlight-me-end>			return SQLTokenizer.INT;
 		if(dataTypeIdx >= BIGINT_IDX)
 			return SQLTokenizer.BIGINT;
 		if(dataTypeIdx >= MONEY_IDX)
 			return SQLTokenizer.MONEY;
-		if(dataTypeIdx >= DECIMAL_IDX)
+		if(dataTypeIdx >= DECIMAL_IDX)</highlight-me>
 			return SQLTokenizer.DECIMAL;
-		return SQLTokenizer.DOUBLE;
+		return SQLTokenizer.DOUBLE;</highlight-me>
 	}
 	
     /**

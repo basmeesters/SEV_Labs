@@ -47,27 +47,27 @@ abstract class ExpressionFunctionReturnP1 extends ExpressionFunction {
 
     Object getObject() throws Exception{
 		if(isNull()) return null;
-<highlight-me class='highlight-me n14'highlight-me-end><highlight-me class='highlight-me n13'highlight-me-end><highlight-me class='highlight-me n7'highlight-me-end><highlight-me class='highlight-me n6'highlight-me-end><highlight-me class='highlight-me n5'highlight-me-end><highlight-me class='highlight-me n0'highlight-me-end>        int dataType = getDataType();
+<highlight-me class='highlight-me n10'highlight-me-end>        int dataType = getDataType();
         switch(dataType){
-<highlight-me class='highlight-me n12'highlight-me-end>	        case SQLTokenizer.BIT:
+	        case SQLTokenizer.BIT:
 	        case SQLTokenizer.BOOLEAN:
-	                return getBoolean() ? Boolean.TRUE : Boolean.FALSE;
-	        case SQLTokenizer.BINARY:
+<highlight-me class='highlight-me n4'highlight-me-end>	                return getBoolean() ? Boolean.TRUE : Boolean.FALSE;
+<highlight-me class='highlight-me n3'highlight-me-end>	        case SQLTokenizer.BINARY:
 	        case SQLTokenizer.VARBINARY:
 	                return getBytes();
 	        case SQLTokenizer.TINYINT:
 	        case SQLTokenizer.SMALLINT:
 	        case SQLTokenizer.INT:
-	                return new Integer( getInt() );
-	        case SQLTokenizer.BIGINT:
+<highlight-me class='highlight-me n5'highlight-me-end>	                return new Integer( getInt() );</highlight-me>
+	        case SQLTokenizer.BIGINT:</highlight-me>
 	                return new Long( getLong() );
 	        case SQLTokenizer.REAL:
 	                return new Float( getFloat() );
 	        case SQLTokenizer.FLOAT:
 	        case SQLTokenizer.DOUBLE:
-	                return new Double( getDouble() );</highlight-me>
-	        case SQLTokenizer.MONEY:</highlight-me>
-	        case SQLTokenizer.SMALLMONEY:</highlight-me>
+	                return new Double( getDouble() );
+	        case SQLTokenizer.MONEY:
+	        case SQLTokenizer.SMALLMONEY:
 	                return Money.createFromUnscaledValue( getMoney() );
 	        case SQLTokenizer.NUMERIC:
 	        case SQLTokenizer.DECIMAL:
@@ -77,16 +77,16 @@ abstract class ExpressionFunctionReturnP1 extends ExpressionFunction {
 	        case SQLTokenizer.VARCHAR:
 	        case SQLTokenizer.NVARCHAR:
 	        case SQLTokenizer.LONGNVARCHAR:</highlight-me>
-	        case SQLTokenizer.LONGVARCHAR:</highlight-me></highlight-me>
+	        case SQLTokenizer.LONGVARCHAR:
 	        		return getString();</highlight-me>
 	        case SQLTokenizer.LONGVARBINARY:
-<highlight-me class='highlight-me n4'highlight-me-end><highlight-me class='highlight-me n3'highlight-me-end><highlight-me class='highlight-me n2'highlight-me-end>	                return getBytes();
+<highlight-me class='highlight-me n0'highlight-me-end>	                return getBytes();
 			case SQLTokenizer.DATE:
 			case SQLTokenizer.TIME:
 			case SQLTokenizer.TIMESTAMP:
-			case SQLTokenizer.SMALLDATETIME:</highlight-me>
+			case SQLTokenizer.SMALLDATETIME:
 				return new DateTime( getLong(), dataType );
-	        case SQLTokenizer.UNIQUEIDENTIFIER:</highlight-me>
+	        case SQLTokenizer.UNIQUEIDENTIFIER:
 	                return getBytes();
 	        default: throw createUnspportedDataType(param1.getDataType());
 	    }</highlight-me>

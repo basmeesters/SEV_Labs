@@ -30,11 +30,11 @@ public void GenerateLocations(loc project)
 public void Duplication(loc project, int threshold, int tp)
 {
 	str p = replaceAll(replaceAll("<project>", "|", ""), "/", "_");
-	loc file = |file:///C:/wamp/www/similyzer/communicator/resultsType1.data|;
+	loc file = |project://Lab2/data_sdasdsa.data|;
 	if(tp == 2)
-		file = |file:///C:/wamp/www/similyzer/communicator/resultsType2.data|;
+		file = |project://Lab2/data_sdasdsa2.data|;
 	writeFile(file, "");
-	VisualFormat(project, threshold, tp, void (str string){writeFile(file, string);});
+	VisualFormat(project, threshold, tp, void (str string){appendToFile(file, string);});
 }
 
 public void Print(loc project, int t, int tp, bool log)
@@ -42,7 +42,7 @@ public void Print(loc project, int t, int tp, bool log)
 	str p = replaceAll(replaceAll("<project>", "|", ""), "/", "_");
 	loc file = |project://Lab2/data_<p>.data|;
 	if (log)
-		PrintDetail(project, t,  tp, void (str string){writeFile(file, string);});
+		PrintDetail(project, t,  tp, void (str string){appendToFile(file, string);});
 	else 
 		PrintDetail(project, t, tp, print);
 }
@@ -108,4 +108,42 @@ public list[tuple[&T, &T]] ListPairs(list[&T] tlist) {
 		}
 	}
 	return pairs;
+}
+
+public void Report(loc project, int t, int tp)
+{
+	ast = AST(project);
+	if (tp == 2) 
+		ast = SerializedAST(ast);
+	statements = MethodStatements(ast, t);
+	duplicationMap h = Filter(Hash(statements));
+	h = Subclones(h);
+	Report(h, project);
+}
+
+public void Report(duplicationMap h, loc name)
+{
+	println("The clone report of <name>:");
+	
+	totalSize = 0;
+	int i = 1;
+	int cloneClass = 0;
+	int clone = 0;
+	for (list[Statement] s <- h) {
+		tuple[loc a,list[Statement] b,int c] first = getOneFrom(h[s]);
+		int listSize = size(h[s]);
+		cloneSize = first.c * (listSize -1);
+		if (cloneSize > cloneClass)
+			cloneClass = cloneSize;
+		if (first.c > clone)
+			clone = first.c;
+		totalSize += cloneSize;
+		i += 1;
+	}
+	
+	println("Amount of clone classes <i>");
+	println("The biggest clone class has size: <cloneClass> lines of code");
+	println("The biggest clone is: <clone> lines of code"); 
+	println("The total amount of cloned code is: <totalSize> lines of code");
+
 }

@@ -21,19 +21,19 @@ public loc f2 = |project://smallsql0.21_src/src/smallsql/database/ExpressionArit
 // Get all the duplications in two files
 public duplicationMap FileDuplications(loc p1, loc p2, int t, int tp)
 {
-	Declaration ast1 = createAstFromFile(p1, false);
-	Declaration ast2 = createAstFromFile(p2, false);
+	ast1 = createAstFromFile(p1, false);
+	ast2 = createAstFromFile(p2, false);
 	
 	if (tp == 2) {
-		ast1 = SerializedAST({ast1});
-		ast2 = SerializedAST({ast2});
+		ast1 = SerializedAST(ast1);
+		ast2 = SerializedAST(ast2);
 		
 		statements = MethodStatements(ast1, t);
 		statements += MethodStatements(ast2, t);
 	}
 	
-	statements = MethodStatements({ast1}, t);
-	statements += MethodStatements({ast2}, t);
+	statements = MethodStatements(ast1, t);
+	statements += MethodStatements(ast2, t);
 	
 	duplicationMap h = Filter(Hash(statements));
 	return Subclones(h);
