@@ -25,7 +25,7 @@ public loc big = |project://hsqldb-2.3.1|;
 // Test GetStatements
 test bool testStatements()
 {
-	println("Test GetStatements");
+	println("Start test GetStatements");
 	ast = AST(simple);
 	statements = [];
 	top-down-break visit(ast) {
@@ -36,9 +36,15 @@ test bool testStatements()
 	
 	s1 = size(statements);
 	s2 = AllStatements(simple);
-	println("size 1: <s1> & size 2: <s2>");
-	int b = abs(s1 - s2);
-	return b <= s1 / 20;
+	real b = toReal(abs(s1 - s2));
+	if (b >= toReal(s1) / 20.0) {
+		println(b);
+		println(s1/20.0);
+		println("failed test..\nsize 1: <s1> & size 2: <s2>");
+		return false;
+	}
+	println("Test GetStatements succeeded!");
+	return true;
 }
 
 private int AllStatements(loc project)
@@ -61,11 +67,11 @@ test bool testBlocks()
 	blocks1 = MakeBlocks(block1, thres);
 	for (b <- blocks1) {
 		if (size(b) < thres) {
-			println("smaller than <thres>: <b>");
+			println("failed test..\nsmaller than <thres>: <b>");
 			return false;
 		}
 	}
-	println("No block was smaller than given");
+	println("Test MakeBlocks succeeded!");
 	return true;
 }
 
@@ -84,6 +90,7 @@ private list[Statement] generateStatements(loc project)
 // Test MakeBlock
 test bool testBlock()
 {
+	println("Start test MakeBlock");
 	ast = AST(simple);
 	statements = MethodStatements(ast, 5);
 	statementList = getOneFrom(statements);
@@ -91,20 +98,23 @@ test bool testBlock()
 	bool b = true;
 	for (s <- statementList) {
 		if (s@src.begin.line < m.a.begin.line) {
+			println("failed..");
 			println(s@src.begin.line);
 			println(s@src.end.line);
 			println(m.a.begin.line);
 			println(m.a.end.line);
-			b = false;
+			return false;
 			break;
 		}	
 	}
+	println("Test MakeBlock succeeded!");
 	return b;
 }
 
 // Test Hash
 test bool testHash()
 {
+	println("Start test Hash");
 	ast = AST(simple);
 	statements = MethodStatements(ast, 5);
 	h = Hash(statements);
@@ -113,13 +123,17 @@ test bool testHash()
 			println("<s> not in the hashmap");
 			return false;
 		}
+	println("Test MakeBlocks succeeded!");
 	return true;
 }
 
 // Test Subclones
 test bool testClones()
 {
+	println("Test Subclones start");
 	duplicationMap h = Subclones(Filter(Hash(MethodStatements(AST(simple), 5))));
-	hh = Subclones(h);
+	if (Subclones(h) != h)
+		return false;
+	println("Test Subclones succeeded!");
 	return h == hh;
 }

@@ -4,13 +4,9 @@ import lang::java::m3::Core;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import IO;
-import Node;
 import List;
 import Map;
-import util::Math;
-import DateTime;
 import Set;
-import Relation;
 
 alias duplicationMap = map[list[Statement], rel[loc,list[Statement],int]];
 
@@ -21,20 +17,12 @@ public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,
 public list[list[Statement]] MethodStatements(set[Declaration] ast, int t)
 {
 	statements = [];
-	LOC = 0;
 	top-down-break visit(ast) {
 		case a:\initializer(s)			:	statements += MakeBlocks(GetStatements([s]), t);
-		case a:\constructor(n, p, e, s)	:	
-			{ 
-				statements += MakeBlocks(GetStatements([s]), t); 
-				LOC += (a@src.end.line - a@src.begin.line);
-			}
-		case a:\method(r,n, p, e, s) 	:	
-		{ 
-			statements += MakeBlocks(GetStatements([s]), t); 
-			LOC += (a@src.end.line - a@src.begin.line);
-		}
-	}		
+		case a:\constructor(n, p, e, s)	:	statements += MakeBlocks(GetStatements([s]), t); 
+		case a:\method(r,n, p, e, s) 	:	statements += MakeBlocks(GetStatements([s]), t); 
+	}	
+	// 		LOC += (a@src.end.line - a@src.begin.line);	
 	return statements;
 }
 

@@ -58,6 +58,7 @@ private void PrintDetail(loc project, int t, int tp, void (str string) log)
 	statements = MethodStatements(ast, t);
 	duplicationMap h = Filter(Hash(statements));
 	h = Subclones(h);
+	Report(h, project, log);	
 	totalSize = 0;
 	int i = 1;
 	for (list[Statement] s <- h) {
@@ -110,7 +111,7 @@ public list[tuple[&T, &T]] ListPairs(list[&T] tlist) {
 	return pairs;
 }
 
-public void Report(loc project, int t, int tp)
+public void Report(loc project, int t, int tp, void (str string) log)
 {
 	ast = AST(project);
 	if (tp == 2) 
@@ -118,12 +119,12 @@ public void Report(loc project, int t, int tp)
 	statements = MethodStatements(ast, t);
 	duplicationMap h = Filter(Hash(statements));
 	h = Subclones(h);
-	Report(h, project);
+	Report(h, project, log);	
 }
 
-public void Report(duplicationMap h, loc name)
+public void Report(duplicationMap h, loc name, void (str string) log)
 {
-	println("The clone report of <name>:");
+	log("The clone report of <name>:\n");
 	
 	totalSize = 0;
 	int i = 1;
@@ -141,9 +142,8 @@ public void Report(duplicationMap h, loc name)
 		i += 1;
 	}
 	
-	println("Amount of clone classes <i>");
-	println("The biggest clone class has size: <cloneClass> lines of code");
-	println("The biggest clone is: <clone> lines of code"); 
-	println("The total amount of cloned code is: <totalSize> lines of code");
-
+	log("Amount of clone classes <i>\n");
+	log("The biggest clone class has : <cloneClass> lines of code duplicated\n");
+	log("The biggest clone has: <clone> lines of code duplicated\n"); 
+	log("The total amount of cloned code is: <totalSize> lines of code\n\n");
 }
