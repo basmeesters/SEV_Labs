@@ -30,9 +30,9 @@ public void GenerateLocations(loc project)
 public void Duplication(loc project, int threshold, int tp)
 {
 	str p = replaceAll(replaceAll("<project>", "|", ""), "/", "_");
-	loc file = |project://Lab2/data_sdasdsa.data|;
+	loc file = |file:///C:/wamp/www/similyzer/communicator/resultsType1.data|;
 	if(tp == 2)
-		file = |project://Lab2/data_sdasdsa2.data|;
+		file = |file:///C:/wamp/www/similyzer/communicator/resultsType2.data|;
 	writeFile(file, "");
 	VisualFormat(project, threshold, tp, void (str string){appendToFile(file, string);});
 }

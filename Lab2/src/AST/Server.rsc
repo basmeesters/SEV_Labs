@@ -5,6 +5,7 @@ import DateTime;
 import List;
 import String;
 import AST::Logging;
+import AST::FileDetails;
 
 loc configReq = |file:///C:/wamp/www/similyzer/communicator/requests.data|;
 loc configRes = |file:///C:/wamp/www/similyzer/communicator/responses.data|;
@@ -29,6 +30,7 @@ public bool startServer() {
 				case /testReq/: println("test");
 				case /testRes/: respond("test", "Server is okay!");
 				case /analyze.*/: analyze(request);
+				case /comparePair.*/: comparePair(request);
 				default: respond("error", "Unknown request: <request>");
 			}
 			lineNumber += 1;
@@ -73,6 +75,18 @@ public bool respond(str command, str response) {
 	appendToFile(configRes, "\n<command>:<response>");
 	println("response: <response>");
 	return true;
+}
+
+public bool comparePair(request) {
+	if (/[:]<file1:.*>[:][:]<file2:.*>[:][:]<clonesType:.*>$/ := request) {
+		clearConfig();
+		respond("comparing", "Comparing Files..");
+		Format(toLocation(file1), toLocation(file2), 5, toInt(clonesType));
+		respond("comparingDone", "Files compared!");
+		return true;
+	}
+	respond("error", "Request is invalid! (<request>)");
+	return false;
 }
 
 public bool analyze(str request) {
