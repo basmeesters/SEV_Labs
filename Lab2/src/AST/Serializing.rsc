@@ -12,12 +12,10 @@ public loc big = |project://hsqldb-2.3.1|;
 // Just a shorter variant 
 public set[Declaration] AST(loc project) = createAstsFromEclipseProject(project,true);
 
-// One declaration for each file
 // https://github.com/cwi-swat/rascal/blob/master/src/org/rascalmpl/library/lang/java/m3/AST.rsc
+// Serialize the AST by replacing variable and method names using the java grammar from the link above
 public set[Declaration] SerializedAST(loc project) = SerializedAST(AST(project));
-
 public set[Declaration] SerializedAST(Declaration d) = SerializedAST(SerializedAST({d}));
-// Serialize the AST by replacing variable and method names
 public set[Declaration] SerializedAST(set[Declaration] ast) 
 {
 	return visit (ast) 

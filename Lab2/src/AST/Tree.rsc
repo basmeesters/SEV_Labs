@@ -22,7 +22,7 @@ public list[list[Statement]] MethodStatements(set[Declaration] ast, int t)
 		case a:\constructor(n, p, e, s)	:	statements += MakeBlocks(GetStatements([s]), t); 
 		case a:\method(r,n, p, e, s) 	:	statements += MakeBlocks(GetStatements([s]), t); 
 	}	
-	// 		LOC += (a@src.end.line - a@src.begin.line);	
+	// 	LOC += (a@src.end.line - a@src.begin.line);	
 	return statements;
 }
 

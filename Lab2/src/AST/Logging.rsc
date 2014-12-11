@@ -21,7 +21,7 @@ public loc big = |project://hsqldb-2.3.1|;
 public void GenerateLocations(loc project)
 {
 	list[loc] files = getFiles(project, "java");
-	loc locFile = |file:///C:/wamp/www/similyzer/communicator/locations.data|;
+	loc locFile = |project://Lab2/locations.data|; // |file:///C:/wamp/www/similyzer/communicator/locations.data|;
 	writeFile(locFile, "");
 	for (f <- files)
 		appendToFile(locFile, "<f.uri>\n");
@@ -30,9 +30,9 @@ public void GenerateLocations(loc project)
 public void Duplication(loc project, int threshold, int tp)
 {
 	str p = replaceAll(replaceAll("<project>", "|", ""), "/", "_");
-	loc file = |file:///C:/wamp/www/similyzer/communicator/resultsType1.data|;
+	loc file = |project://Lab2/data_1.data|; //|file:///C:/wamp/www/similyzer/communicator/resultsType1.data|;
 	if(tp == 2)
-		file = |file:///C:/wamp/www/similyzer/communicator/resultsType2.data|;
+		file = |project://Lab2/data_2.data|;// |file:///C:/wamp/www/similyzer/communicator/resultsType2.data|;
 	writeFile(file, "");
 	VisualFormat(project, threshold, tp, void (str string){appendToFile(file, string);});
 }
@@ -93,8 +93,10 @@ public void VisualFormat(duplicationMap duplications, int tp, void (str string) 
 		lrel[loc,list[Statement],int] positions = toList(duplications[k]);
 		relation += ListPairs(positions);
 	}
+	str s = "";
 	for (tuple[tuple[loc a,list[Statement] b,int c] l1, tuple[loc a,list[Statement] b,int c] l2] r <- relation)
-		log("<r.l1.a.uri>,<r.l2.a.uri>,<r.l1.c>,<r.l1.a.begin.line>,<r.l1.a.end.line>,<r.l2.a.begin.line>,<r.l2.a.end.line>\n");
+		s += "<r.l1.a.uri>,<r.l2.a.uri>,<r.l1.c>,<r.l1.a.begin.line>,<r.l1.a.end.line>,<r.l2.a.begin.line>,<r.l2.a.end.line>\n";
+	log(s);
 }
 
 public list[tuple[&T, &T]] ListPairs(list[&T] tlist) {
