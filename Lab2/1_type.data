@@ -47,9 +47,9 @@ abstract class ExpressionFunctionReturnP1 extends ExpressionFunction {
 
     Object getObject() throws Exception{
 		if(isNull()) return null;
-<highlight-me><highlight-me><highlight-me><highlight-me><highlight-me><highlight-me>        int dataType = getDataType();
+<highlight-me class='highlight-me n14'highlight-me-end><highlight-me class='highlight-me n13'highlight-me-end><highlight-me class='highlight-me n7'highlight-me-end><highlight-me class='highlight-me n6'highlight-me-end><highlight-me class='highlight-me n5'highlight-me-end><highlight-me class='highlight-me n0'highlight-me-end>        int dataType = getDataType();
         switch(dataType){
-<highlight-me>	        case SQLTokenizer.BIT:
+<highlight-me class='highlight-me n12'highlight-me-end>	        case SQLTokenizer.BIT:
 	        case SQLTokenizer.BOOLEAN:
 	                return getBoolean() ? Boolean.TRUE : Boolean.FALSE;
 	        case SQLTokenizer.BINARY:
@@ -80,7 +80,7 @@ abstract class ExpressionFunctionReturnP1 extends ExpressionFunction {
 	        case SQLTokenizer.LONGVARCHAR:</highlight-me></highlight-me>
 	        		return getString();</highlight-me>
 	        case SQLTokenizer.LONGVARBINARY:
-<highlight-me><highlight-me><highlight-me>	                return getBytes();
+<highlight-me class='highlight-me n4'highlight-me-end><highlight-me class='highlight-me n3'highlight-me-end><highlight-me class='highlight-me n2'highlight-me-end>	                return getBytes();
 			case SQLTokenizer.DATE:
 			case SQLTokenizer.TIME:
 			case SQLTokenizer.TIMESTAMP:

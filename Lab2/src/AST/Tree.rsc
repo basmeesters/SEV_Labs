@@ -113,12 +113,6 @@ public tuple[loc, list[Statement], int] MakeBlock(list[Statement] statements)
 	int startLine = location.begin.line;
 	int lastPosition = 0;
 	loc lastStatement = last(statements)@src;
-	//for (Statement b <- statements)	{
-	//	if (b@src.end.line > lastPosition) {
-	//		lastStatement = b@src;
-	//		lastPosition = b@src.end.line;
-	//	}
-	//}
 	endLine = lastStatement.end.line;
 	endColumn = lastStatement.end.column;
 	length = lastStatement.offset - location.offset + lastStatement.length;
