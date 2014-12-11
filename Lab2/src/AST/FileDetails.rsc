@@ -57,9 +57,9 @@ public void Format(loc p1, loc p2, int t, int tp)
 	}
 	// File 1
 	str p = replaceAll(replaceAll("<p1>", "|", ""), "/", "_");
-	loc file = |project://Lab2/1_type1.data|;
+	loc file = |file:///C:/wamp/www/similyzer/communicator/f1Type1.data|;
 	if (tp == 2)
-		file = |project://Lab2/1_type2.data|;
+		file = |file:///C:/wamp/www/similyzer/communicator/f1Type2.data|;
 	str s = "";
 	codeFile1 = generateMarkedCode(p1, r1);
 	for (str i <- codeFile1)
@@ -68,9 +68,9 @@ public void Format(loc p1, loc p2, int t, int tp)
 	
 	// File 2
 	p = replaceAll(replaceAll("<p2>", "|", ""), "/", "_");
-	file = |project://Lab2/2_type1.data|;
+	file = |file:///C:/wamp/www/similyzer/communicator/f2Type1.data|;
 	if (tp == 2)
-		file = |project://Lab2/2_type2.data|;
+		file = |file:///C:/wamp/www/similyzer/communicator/f2Type2.data|;
 	s = "";
 	list[str] codeFile2 = generateMarkedCode(p2, r2);
 	for (str i <- codeFile2)
